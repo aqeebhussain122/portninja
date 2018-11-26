@@ -5,14 +5,12 @@ GOOD POINTS:
 Program is able to banner grab successfully and declare 
 if a port is open or closed
 
-
 THINGS TO IMPROVE:
 Does not other computers too well
 Crashes if a service is not available
 Since TCP has a standard type of blocking socket
 it awaits activity, in some cases it will not recieve it at all
 In that case it waits (NOT GOOD)
-
 
 TEST PLAN #1
 
