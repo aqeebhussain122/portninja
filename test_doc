@@ -1,0 +1,48 @@
+===================================================================================
+DATE: 08/10/2018
+
+GOOD POINTS:
+Program is able to banner grab successfully and declare 
+if a port is open or closed
+
+
+THINGS TO IMPROVE:
+Does not other computers too well
+Crashes if a service is not available
+Since TCP has a standard type of blocking socket
+it awaits activity, in some cases it will not recieve it at all
+In that case it waits (NOT GOOD)
+
+
+TEST PLAN #1
+
+NMAP scan of local machine
+22/tcp   open  ssh
+53/tcp   open  domain
+80/tcp   open  http
+139/tcp  open  netbios-ssn
+445/tcp  open  microsoft-ds
+631/tcp  open  ipp
+3306/tcp open  mysql
+8080/tcp open  http-proxy
+
+test of ssh - 22
+IP Address is: 127.0.0.1
+Port 22 open
+Banner is SSH-2.0-OpenSSH_7.6p1 Ubuntu-4
+
+Test of DNS - 53
+IP Address is: 127.0.0.1
+Port 53 open
+(stuck) No action
+
+Addition to code with sockettimeout function causes following result
+--------------------------------------
+IP Address is: 127.0.0.1
+Port 53 open
+('Exception', timeout('timed out',))
+---------------------------------------
+(After 5 seconds of wait)
+==========================================================================================================================================================
+
+
