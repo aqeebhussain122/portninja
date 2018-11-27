@@ -6,7 +6,7 @@ Program is able to banner grab successfully and declare
 if a port is open or closed
 
 THINGS TO IMPROVE:
-Does not other computers too well
+Does not work with other computers too well
 Crashes if a service is not available
 Since TCP has a standard type of blocking socket
 it awaits activity, in some cases it will not recieve it at all
@@ -42,5 +42,49 @@ Port 53 open
 ---------------------------------------
 (After 5 seconds of wait)
 ==========================================================================================================================================================
+DATE: 27/11/2018
 
+Good points:
+Scans on other machines are successful
+If a service is not available the system will timeout in 5 secs
+Banners are retrieved from all TCP services
+
+Bad points:
+Ports scans cannot perform banner grabs on UDP ports
+Does not work well with Windows as of this moment
+
+
+Test Plan #1
+
+NMAP Ports available on machine:
+135/tcp  open  msrpc - 
+139/tcp  open  netbios-ssn
+445/tcp  open  microsoft-ds
+2701/tcp open  sms-rcinfo
+3000/tcp open  ppp
+8192/tcp open  sophos
+8194/tcp open  sophos
+
+
+Results:
+Port 135 open
+('Exception', timeout('timed out',))
+
+Port 139 open
+Banner is �� - Obfuscated banner
+
+Port 445 open 
+('Exception', error(104, 'Connection reset by peer'))
+
+Port 2701 open
+Banner is (SUCCESSFULLY SHOWN)
+
+Port 3000 open
+Banner not showing up :(
+
+Port 8192 open
+Banner is (SUCCESSFULLY SHOWN)
+
+NOTE: To maintain security of the machines used, I have chosen not to reveal the banners
+============================================================================================
 
