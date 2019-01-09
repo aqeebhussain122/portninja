@@ -41,11 +41,13 @@ s.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
 packet = ''
 
 #source_ip = '127.0.0.1'
-#dest_ip = '127.0.0.1'
+#dest_ip = '10.2.0.11'
 
 # Problem in getting command line flexibility
 source_ip = (str(sys.argv[1]))
 dest_ip = (str(sys.argv[2]))
+
+# If the second IP address is not found then the previous argv is copied and used
 
 # IP header fields
 ihl = 5
