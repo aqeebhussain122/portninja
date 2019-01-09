@@ -1,5 +1,6 @@
 #!/usr/bin/python
-
+import os
+os.sys.path.append('/usr/local/lib/python2.7/site-packages')
 import socket
 import sys
 from scapy.all import *
@@ -39,8 +40,12 @@ createSock(s)
 s.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
 packet = ''
 
-source_ip = '127.0.0.1'
-dest_ip = '127.0.0.1'
+#source_ip = '127.0.0.1'
+#dest_ip = '127.0.0.1'
+
+# Problem in getting command line flexibility
+source_ip = (str(sys.argv[1]))
+dest_ip = (str(sys.argv[2]))
 
 # IP header fields
 ihl = 5
