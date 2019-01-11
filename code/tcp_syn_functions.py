@@ -1,3 +1,4 @@
+
 #!/usr/bin/python
 
 import socket
@@ -10,7 +11,10 @@ error_msg = []
 
 # template socket which will be passed to functions
 s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
-
+source_ip = (str(sys.argv[1]))
+dest_ip = (str(sys.argv[2]))
+#source_port = (int(sys.argv[3]))
+#dest_port = (int(sys.argv[4]))
 # DOCSTRING: SOCKET CREATION using try and catch error handling
 def createSock(s):
 	try:
@@ -30,13 +34,11 @@ def checksum(msg):
 		s += w
 	s = (s >> 16) + (s & 0xffff)
 	s = ~s & 0xffff
-
 	return s
 
 createSock(s)
 
-# Kernel will not add headers because we're adding them in
-
+# IP address is given in as function parameter/argument
 def ipCreate(source_ip, dest_ip):
 	s.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
 	packet = ''
@@ -62,15 +64,14 @@ def ipCreate(source_ip, dest_ip):
 	return ip_header
 
 # Once the header is packed and the function returns it. ip header is created
-ip_header = ipCreate('127.0.0.1', '127.0.0.1')
+#ip_header = ipCreate('127.0.0.1', '127.0.0.1')
 
+ip_header = ipCreate(source_ip, dest_ip)
+
+# SYN Packet is created from the function containing the flags
 def tcpCreate(source_port, dest_port):
-	source_ip = '127.0.0.1'
-	dest_ip = '127.0.0.1'
-	# source port
-	#source_port = 5456
-	# destination port
-	#dest_port = 80
+	source_ip = '10.0.2.7'
+	dest_ip = '10.0.2.10'
 	seq = 0
 	ack_seq = 0
 	doff = 5
@@ -116,10 +117,11 @@ def tcpCreate(source_port, dest_port):
 
 	return tcp_header
 
-tcp_header = tcpCreate(5543, 80)
+tcp_header = tcpCreate(5583, 80)
 
 packet = ip_header + tcp_header
-# Attempt to check if data has actually been sent
-result = s.sendto(packet, ('127.0.0.1', 0))
+# Attempt to check if data has actually been sent - s.sendto(packet, ('source_ip' << THIS DETERMINES SUCCESS), 0 ))
+result = s.sendto(packet, (dest_ip, 0))
 
+print result
 # TO TEST THIS PROGRAM LAUNCH IN PYTHON AND OPEN WIRESHARK ON THE SPECIFIED NETWORK INTERFACE

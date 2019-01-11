@@ -47,6 +47,8 @@ packet = ''
 source_ip = (str(sys.argv[1]))
 dest_ip = (str(sys.argv[2]))
 
+# If the second IP address is not found then the previous argv is copied and used
+
 # IP header fields
 ihl = 5
 version = 4
@@ -65,8 +67,6 @@ ihl_version = (version << 4) + ihl
 
 # IP Header packed up 
 ip_header = pack('!BBHHHBBH4s4s', ihl_version, tos, tot_len, id, frag_off, ttl, protocol, check, saddr, daddr)
-
-
 # source port
 source = 5456
 # destination port
@@ -122,10 +122,20 @@ tcp_header = pack('!HHLLBBHHH', source, dest, seq, ack_seq, offset_res, tcp_flag
 	#
 	#
 
+def rstPacket(dest_ip, dest_port):
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
+    s.connect((dest_ip, dest_port))
+    l_onoff = 5
+    l_linger = 5
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_LINGER,
+                 struct.pack('ii', l_onoff, l_linger))
+    # send data here
+    s.close()
+
 packet = ip_header + tcp_header
 # Attempt to check if data has actually been sent
 try:
 	result = s.sendto(packet, (dest_ip, 0))
+	#rstPacket(dest_ip, 80)
 except Exception as e:
 	print(e)
-	listeners.remove(1)
