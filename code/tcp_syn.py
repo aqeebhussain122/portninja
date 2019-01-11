@@ -63,7 +63,7 @@ daddr = socket.inet_aton(dest_ip)
 
 ihl_version = (version << 4) + ihl
 
-# IP Header packed up 
+# IP Header packed up
 ip_header = pack('!BBHHHBBH4s4s', ihl_version, tos, tot_len, id, frag_off, ttl, protocol, check, saddr, daddr)
 # source port
 source = source_port
