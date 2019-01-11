@@ -43,8 +43,7 @@ packet = ''
 # Problem in getting command line flexibility
 source_ip = (str(sys.argv[1]))
 dest_ip = (str(sys.argv[2]))
-source_port = (int(sys.argv[3]))
-dest_port = (int(sys.argv[4]))
+
 # If the second IP address is not found then the previous argv is copied and used
 
 # IP header fields
@@ -66,9 +65,9 @@ ihl_version = (version << 4) + ihl
 # IP Header packed up 
 ip_header = pack('!BBHHHBBH4s4s', ihl_version, tos, tot_len, id, frag_off, ttl, protocol, check, saddr, daddr)
 # source port
-source = source_port
+source = 5456
 # destination port
-dest = dest_port
+dest = 80
 seq = 0
 ack_seq = 0
 doff = 5
