@@ -1,0 +1,90 @@
+===================================================================================
+DATE: 08/10/2018
+
+GOOD POINTS:
+Program is able to banner grab successfully and declare 
+if a port is open or closed
+
+THINGS TO IMPROVE:
+Does not work with other computers too well
+Crashes if a service is not available
+Since TCP has a standard type of blocking socket
+it awaits activity, in some cases it will not recieve it at all
+In that case it waits (NOT GOOD)
+
+TEST PLAN #1
+
+NMAP scan of local machine
+22/tcp   open  ssh
+53/tcp   open  domain
+80/tcp   open  http
+139/tcp  open  netbios-ssn
+445/tcp  open  microsoft-ds
+631/tcp  open  ipp
+3306/tcp open  mysql
+8080/tcp open  http-proxy
+
+test of ssh - 22
+IP Address is: 127.0.0.1
+Port 22 open
+Banner is SSH-2.0-OpenSSH_7.6p1 Ubuntu-4
+
+Test of DNS - 53
+IP Address is: 127.0.0.1
+Port 53 open
+(stuck) No action
+
+Addition to code with sockettimeout function causes following result
+--------------------------------------
+IP Address is: 127.0.0.1
+Port 53 open
+('Exception', timeout('timed out',))
+---------------------------------------
+(After 5 seconds of wait)
+==========================================================================================================================================================
+DATE: 27/11/2018
+
+Good points:
+Scans on other machines are successful
+If a service is not available the system will timeout in 5 secs
+Banners are retrieved from all TCP services
+
+Bad points:
+Ports scans cannot perform banner grabs on UDP ports
+Does not work well with Windows as of this moment
+
+
+Test Plan #1
+
+NMAP Ports available on machine:
+135/tcp  open  msrpc - 
+139/tcp  open  netbios-ssn
+445/tcp  open  microsoft-ds
+2701/tcp open  sms-rcinfo
+3000/tcp open  ppp
+8192/tcp open  sophos
+8194/tcp open  sophos
+
+
+Results:
+Port 135 open
+('Exception', timeout('timed out',))
+
+Port 139 open
+Banner is �� - Obfuscated banner
+
+Port 445 open 
+('Exception', error(104, 'Connection reset by peer'))
+
+Port 2701 open
+Banner is (SUCCESSFULLY SHOWN)
+
+Port 3000 open
+Banner not showing up :(
+
+Port 8192 open
+Banner is (SUCCESSFULLY SHOWN)
+
+NOTE: To maintain security of the machines used, I have chosen not to reveal the banners
+============================================================================================
+
