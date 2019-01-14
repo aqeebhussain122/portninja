@@ -2,6 +2,7 @@
 
 import socket
 
+# Test program
 UDP_IP = "192.168.1.1"
 UDP_PORT = 53
 MESSAGE = "Hello, World!"
