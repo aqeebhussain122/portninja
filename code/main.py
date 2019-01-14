@@ -44,22 +44,6 @@ def TCPportCheck(ip_addr, port_temp):
 		# Assurance the socket is closed after use
 		sock.close()
 
-# FUNCTION TO EXECUTE SYSTEM COMMAND AND TO RETRIEVE VERSION OF BIND ON DNS IF AVAILABLE
-#def dnsBannerGrab():
-
-	# SOURCE CODE
-	# UDPsock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-	# connection = socket
-
-	# PSEUDOCODE
-	# Create a socket
-	# Embed a subprocess over the wire
-	# Error handle to see if the OS is UNIX compliant
-	# Error handle if the DNS server is BIND or not
-	# Can probably combine above two
-	# If OS is UNIX and server is BIND then do the subprocess
-	# Using the info from README, this should be able to banner grab a bind server
-
 # Prototype function (Needs to be improved) - NOT IMPLEMENTED OR TESTED
 def protocolCheck(port_num):
 	# Added list of protocols based by names and common port numbers
@@ -70,17 +54,6 @@ def protocolCheck(port_num):
 	elif(port_num == 21):
 		print("Protocol: Telnet")
 	return port_num
-
-
-# SEND UDP PORTS DATA TO RETURN STATE AND BANNER
-#def sendUDP(ip, port):
-#	try:
-#		sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-#		sock.sendto(MESSAGE, (ip, port))
-#		sock.settimeout(0)
-#		return sock
-#	except:
-#		pass
 
 def TCPbannerGrab(ip_addr, port_num):
 # WORKS WITH TCP CONNECTIONS ONLY
@@ -115,9 +88,12 @@ def main():
 	port = int((sys.argv[2]))
 	portNumLimit(port)
 	print('IP Address is: ' + ip)
+	#IPaddressCheck()
 	TCPportCheck(ip, port)
 	TCPbannerGrab(ip, port)
 
 if __name__ == '__main__':
 	main()
+
+# Working version of Python - Python 2.7.15rc1
 
