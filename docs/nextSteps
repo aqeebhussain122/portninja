@@ -27,3 +27,24 @@ EXAMPLE OUTPUT
 ;; MSG SIZE  rcvd: 41
 
 implement use of dig version bind command into program to check dns version
+
+UPDATE: 14/01/2018
+
+- Portninja works solidly on Python version: Python 2.7.15rc1
+
+- Currently portninja works against limited ports which do not have access control implemented. such as a firewall implemented, there is not enough code to truly distinguish the presence of a firewall.
+
+- Portninja does not have the ability to scan a host or a subnet to then reveal port states, the ports have to be known from external sources before the software can achieve further actions. 
+
+- Testing further on open and closed ports. Some ports which are open do not get fully processed which results in a broken pipe. This could potentially mean a firewall blocking the socket from going through. 
+
+Possible solution resource
+https://stackoverflow.com/questions/180095/how-to-handle-a-broken-pipe-sigpipe-in-python/180922#180922
+
+- If a non-existent IP is entered, Portninja has no way of catching and adding a timer to this behavior 
+
+- With the banner grabbing there are occurences of non-ascii characters. These are sometimes passed through and should be detected as non-ascii
+
+- Portninja has issues to determine a port between TCP and UDP
+
+- SYN packet function can be modified to cause a DOS attack on a network by sending continous SYN packets, exhausting the resources of the intermediaries (Router, Switch...) 
