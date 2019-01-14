@@ -58,6 +58,7 @@ def protocolCheck(port_num):
 def TCPbannerGrab(ip_addr, port_num):
 # WORKS WITH TCP CONNECTIONS ONLY
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#	connection = sock.connect_ex((ip_addr, port_num))
 	connection = sock.connect_ex((ip_addr, port_num))
 	try:
 		sock.send(b'GET HTTP/1.1 \r\n')
