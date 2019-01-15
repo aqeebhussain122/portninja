@@ -30,6 +30,8 @@ implement use of dig version bind command into program to check dns version
 
 UPDATE: 14/01/2018
 
+- Assemble all finished sub-components to main file once tested and debugged
+
 - Portninja works solidly on Python version: Python 2.7.15rc1
 
 - Currently portninja works against limited ports which do not have access control implemented. such as a firewall implemented, there is not enough code to truly distinguish the presence of a firewall.
@@ -48,3 +50,11 @@ https://stackoverflow.com/questions/180095/how-to-handle-a-broken-pipe-sigpipe-i
 - Portninja has issues to determine a port between TCP and UDP
 
 - SYN packet function can be modified to cause a DOS attack on a network by sending continous SYN packets, exhausting the resources of the intermediaries (Router, Switch...) 
+
+- Add argparse capabilities for better program operation
+https://stackoverflow.com/questions/33574270/typeerror-init-got-an-unexpected-keyword-argument-type-in-argparse
+
+COMPLETED - 15/01/2019
+- SYN packet function can be modified to cause a DOS attack on a network by sending continous SYN packets, exhausting the resources of the intermediaries (Router, Switch...)
+
+- Add argparse capabilities for better program operation
