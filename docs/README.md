@@ -1,8 +1,14 @@
 # portninja
-Network reconnaissance tool used for information gathering on ports and hosts 
+All purpose network tool used for reconnaissance and attacking. 
 
 Product in development
 
+## Information for contributors
+I am looking for suitable volunteers to support the development of Portninja, if you are of the following criteria; get in touch with me via instagram: @intothemistwewalk
+
+- Python programmer (All skill levels welcome)
+- General command line program user (Testing is welcome)
+- Security experts (Enhanced practice on secure coding)
 
 # Important notes
 The product currently only works on the following version of Python:
