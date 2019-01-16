@@ -107,7 +107,7 @@ def main():
         parser.add_argument("dip", help='Destination IP address to form packet', type=str)
 	parser.add_argument("sport", help='Source port to form packet', type=int)
 	parser.add_argument("dport", help='Destination port to form packet', type=int)
-	parser.add_argument("-i", "--inject", help="SYN Flood option to send arbituary number of packets to flood device or network", type=int)
+	parser.add_argument("-f", "--flood", help="SYN Flood option to send arbituary number of packets to flood device or network", type=int)
         args = parser.parse_args()
 
 	ip_header = ipCreate(args.sip, args.dip)
@@ -125,4 +125,4 @@ def main():
 		result = s.sendto(packet, (args.dip, 0))
 
 	# TO TEST THIS PROGRAM LAUNCH IN PYTHON AND OPEN WIRESHARK ON THE SPECIFIED NETWORK INTERFACE
-main()
+#main()
