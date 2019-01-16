@@ -11,3 +11,6 @@ Python 2.7.15rc1 (default, Nov 12 2018, 14:31:15)
 Portninja should be run on a Linux/Unix OS for the time being as there
 have been some issues running portninja correctly from a Windows
 machine as the scanning machine
+
+# Disclaimer
+- All code and content provided on this repository is intended and designed for EDUCATIONAL PURPOSES ONLY!
