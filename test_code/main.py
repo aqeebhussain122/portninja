@@ -59,7 +59,6 @@ def protocolCheck(port_num):
 def TCPbannerGrab(ip_addr, port_num):
 # WORKS WITH TCP CONNECTIONS ONLY
 	sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#	connection = sock.connect_ex((ip_addr, port_num))
 	connection = sock.connect_ex((ip_addr, port_num))
 	try:
 		sock.send(b'GET HTTP/1.1 \r\n')
@@ -93,6 +92,7 @@ def main():
 	parser.add_argument("sport", help='Source port to form packet', type=int)
 	parser.add_argument("dport", help='Destination port to form packet', type=int)
 	parser.add_argument("-f", "--flood", help="SYN Flood option to send arbituary number of packets to flood device or network", type=int)
+	parser.add_argument("-p", "--ports", help="Port switch which will execute an attempt to "
         args = parser.parse_args()
 
         ip_header = syn_flood.ipCreate(args.sip, args.dip)
@@ -106,6 +106,8 @@ def main():
                         i += 1
                         print("Packets sent: {}".format(i))
                         result = s.sendto(packet, (args.dip, 0))
+	elif args.ports:
+		print("You selected ports {}".format(args.ports))
 #	progCheck()
 #	ip = (str(sys.argv[1]))
 #	port = int((sys.argv[2]))
