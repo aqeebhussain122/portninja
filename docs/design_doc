@@ -9,9 +9,12 @@
 		SYN
 		ACK
 	DNS ENUMERATION
-
 	PORT VARIATION
 		TO ATTEMPT BOTH TCP AND UDP PORTS
+		FLEXIBILITY TO SCAN MULTIPLE PORTS
+		USE DIFFERENT SCAN OPTIONS
+	DOS ATTACKS
+		SYN FLOODS
 	
 #HOW TO BANNER GRAB:
 Banner grabbing is an attack which retrieves system labels from servers resulting
