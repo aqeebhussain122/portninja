@@ -85,6 +85,7 @@ def TCPbannerGrab(ip_addr, port_num):
 		sock.close()
 
 def main():
+	permission_check = syn_flood.permissions()
 	s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
         syn_flood.createSock(s)
 	parser = argparse.ArgumentParser(description='SYN Scan and flood tool which forms raw packets taking required IP addresses and port numbers')

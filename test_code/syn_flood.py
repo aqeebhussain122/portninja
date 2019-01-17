@@ -31,8 +31,6 @@ def ipCreate(source_ip, dest_ip):
 	s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
 	s.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
 	packet = ''
-#	packet = None
-
 	# IP header fields
 	ihl = 5
 	version = 4
@@ -137,4 +135,4 @@ def main():
 		result = s.sendto(packet, (args.dip, 0))
 
 	# TO TEST THIS PROGRAM LAUNCH IN PYTHON AND OPEN WIRESHARK ON THE SPECIFIED NETWORK INTERFACE
-main()
+#main()
