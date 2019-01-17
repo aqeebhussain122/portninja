@@ -22,6 +22,7 @@ def main():
 	# Ports switch which takes a list of ports and stores them for processing
 	# Elements in ports list to be accessed one by one and given to port check function
 	parser.add_argument("-p", "--ports", help="Port switch  which will take a number of ports and scan them against destination ip", type=int, nargs='+')
+	parser.add_argument("-s", "--sweep", help="Ping sweep through the network", action='store_true')
         args = parser.parse_args()
 
         ip_header = syn_flood.ipCreate(args.sip, args.dip)
@@ -41,11 +42,15 @@ def main():
 		value = int(args.flood)
 		while i < value:
 			i += 1
-			print("Packets sent: {}".format())
-	elif args.ports:
+			print("Packets sent: {}".format(i))
+			result = s.sendto(packet, (args.dip, 0))
+	if args.ports:
 		for port in args.ports:
 			check_success = ports.TCPportCheck(args.dip, port)
 			check_banner = ports.TCPbannerGrab(args.dip, port)
+	if args.sweep:
+		for i in range(1, 65565):
+			sweep_check = ports.TCPportCheck(args.dip, i)
 
 if __name__ == '__main__':
 	main()

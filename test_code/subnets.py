@@ -4,3 +4,9 @@
 # Maximum number of elements should be based upon the subnet number
 # Store all subnet values in a list and map their values to an if condition
 
+
+# Calculate the subnets in comparison to the number given using a hash
+# Use hash in main function for ip address
+# 
+def subnet_calc(ip_addr):
+	subnets = []
