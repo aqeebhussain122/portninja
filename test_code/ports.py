@@ -56,3 +56,4 @@ def TCPbannerGrab(ip_addr, port_num):
 		print("Exception", error)
 	finally:
 		sock.close()
+

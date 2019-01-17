@@ -58,3 +58,21 @@ COMPLETED - 15/01/2019
 - SYN packet function can be modified to cause a DOS attack on a network by sending continous SYN packets, exhausting the resources of the intermediaries (Router, Switch...)
 
 - Add argparse capabilities for better program operation
+
+=================================================================================================================================================================================
+
+LOG: 18/01/2019
+
+# Priority 1 component: Work on port scanning capability to scan multiple ports
+
+- Add options of scanning given port numbers and to do a ping sweep of a machine from ports 1 to 65565
+
+- Given port numbers can be implemented in argparse as a list of ints
+
+Psuedocode:
+- Ping sweep can be achieved using for loop from 1 to 65565 attached to variable
+
+FOR I IN RANGE 1 TO 65535
+	VAR = SCAN FUNCTION CALL
+	PRINT("PORT IS OPEN/CLOSED")
+
