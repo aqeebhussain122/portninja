@@ -41,8 +41,9 @@ def main():
 		value = int(args.flood)
 		while i < value:
 			i += 1
-			print("Packets sent: {}".format())
-	elif args.ports:
+			print("Packets sent: {}".format(i))
+			result = s.sendto(packet, (args.dip, 0))
+	if args.ports:
 		for port in args.ports:
 			check_success = ports.TCPportCheck(args.dip, port)
 			check_banner = ports.TCPbannerGrab(args.dip, port)
