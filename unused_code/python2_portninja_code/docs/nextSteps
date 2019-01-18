@@ -1,0 +1,79 @@
+SCANNING OF TECHNIQUES
+====================================================================================
+TCP Scan selection
+
+SYN - Implement as a single file, test and then include within main program 
+
+SAY IF PORT IS TCP OR UDP
+
+TO ENABLE DNS BANNER GRAB
+dig version.bind
+
+EXAMPLE OUTPUT
+; <<>> DiG 9.11.3-1ubuntu1.2-Ubuntu <<>> version.bind
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 42696
+;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 65494
+;; QUESTION SECTION:
+;version.bind.			IN	A
+
+;; Query time: 26 msec
+;; SERVER: 127.0.0.53#53(127.0.0.53)
+;; WHEN: Thu Oct 18 14:42:10 BST 2018
+;; MSG SIZE  rcvd: 41
+
+implement use of dig version bind command into program to check dns version
+
+UPDATE: 14/01/2018
+
+- Assemble all finished sub-components to main file once tested and debugged
+
+- Portninja works solidly on Python version: Python 2.7.15rc1
+
+- Currently portninja works against limited ports which do not have access control implemented. such as a firewall implemented, there is not enough code to truly distinguish the presence of a firewall.
+
+- Portninja does not have the ability to scan a host or a subnet to then reveal port states, the ports have to be known from external sources before the software can achieve further actions. 
+
+- Testing further on open and closed ports. Some ports which are open do not get fully processed which results in a broken pipe. This could potentially mean a firewall blocking the socket from going through. 
+
+Possible solution resource
+https://stackoverflow.com/questions/180095/how-to-handle-a-broken-pipe-sigpipe-in-python/180922#180922
+
+- If a non-existent IP is entered, Portninja has no way of catching and adding a timer to this behavior 
+
+- With the banner grabbing there are occurences of non-ascii characters. These are sometimes passed through and should be detected as non-ascii
+
+- Portninja has issues to determine a port between TCP and UDP
+
+- SYN packet function can be modified to cause a DOS attack on a network by sending continous SYN packets, exhausting the resources of the intermediaries (Router, Switch...) 
+
+- Add argparse capabilities for better program operation
+https://stackoverflow.com/questions/33574270/typeerror-init-got-an-unexpected-keyword-argument-type-in-argparse
+
+COMPLETED - 15/01/2019
+- SYN packet function can be modified to cause a DOS attack on a network by sending continous SYN packets, exhausting the resources of the intermediaries (Router, Switch...)
+
+- Add argparse capabilities for better program operation
+
+=================================================================================================================================================================================
+
+LOG: 18/01/2019
+
+Priority 1 component: Work on port scanning capability to scan multiple ports
+
+- Add options of scanning given port numbers and to do a ping sweep of a machine from ports 1 to 65565
+
+- Given port numbers can be implemented in argparse as a list of ints
+
+Psuedocode:
+- Ping sweep can be achieved using for loop from 1 to 65565 attached to variable
+
+FOR I IN RANGE 1 TO 65535
+	VAR = SCAN FUNCTION CALL
+	PRINT("PORT IS OPEN/CLOSED")
+
+Ping sweep method functional, additional steps to add functionality to read number of ports from a file and scan
