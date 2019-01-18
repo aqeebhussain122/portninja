@@ -17,10 +17,14 @@ def createSock(s):
 
 # Calling of the function to create a socket
 # Checksum which will be passed to verify - Contained in function with storage and access to a global list
+
+# This function requires further research and correcting
 def checksum(msg):
     s = 0
-    for i in range(0, len(msg), 2):
-        w = (ord(msg[i]) << 8) + (ord(msg[i+1]))
+    len_msg = len(msg)
+    # Loop to create range from 0 to length of the packet
+    for i in range(0, len_msg, 2):
+        w = (len_msg << 8) + (len_msg + 1)
         s += w
     s = (s >> 16) + (s & 0xffff)
     s = ~s & 0xffff
@@ -93,6 +97,7 @@ def tcpCreate(source_ip ,dest_ip, source_port, dest_port):
 
     # Checksum function using push flag
     tcp_checksum = checksum(psh)
+    print(tcp_checksum)
 
     tcp_header = pack('!HHLLBBHHH', source_port, dest_port, seq, ack_seq, offset_res, tcp_flags, window, tcp_checksum, urg_ptr)
     return tcp_header
@@ -131,7 +136,7 @@ def main():
             print(("Packets sent: {}".format(i)))
             result = s.sendto(packet, (args.dip, 0))
     else:
-        print("Inject option was not chosen, sending 1 packet...")
+        print("Flood option was not chosen, sending 1 packet to initiate SYN scan")
         result = s.sendto(packet, (args.dip, 0))
 
     # TO TEST THIS PROGRAM LAUNCH IN PYTHON AND OPEN WIRESHARK ON THE SPECIFIED NETWORK INTERFACE
