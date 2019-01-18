@@ -121,7 +121,6 @@ Correct test to show that argparse works
 Test #3: sudo python main.py x.x.x.x x.x.w.x 222 3
 Added the letter to trigger error message 
 
-
 Traceback (most recent call last):
   File "main.py", line 124, in <module>
     main()
