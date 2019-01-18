@@ -8,7 +8,7 @@ from struct import *
 error_msg = []
 
 def usage():
-	if(sys.argv <= 3):
+	if(len(sys.argv) <= 3):
 		print('Not enough arguments')
 
 def createSock(s):
@@ -110,7 +110,7 @@ def tcpCreate(source_ip ,dest_ip, source_port, dest_port):
 def main():
 	s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
 	createSock(s)
-	usage()	
+	usage()
 	source_ip = (str(sys.argv[1]))
 	dest_ip = (str(sys.argv[2]))
 	source_port = (int(sys.argv[3]))

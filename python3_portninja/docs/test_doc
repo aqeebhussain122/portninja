@@ -166,3 +166,30 @@ Traceback (most recent call last):
 struct.error: 'H' format requires 0 <= number <= 65535
 
 Exceptions to be added to increase clear verbosity
+===================================================================
+
+18/01/2019
+
+Code has all been reformatted to python3 and added to new directory test results of
+code from test directory below:
+
+main.py: 
+
+TEST #1: 
+
+sudo python3 syn_flood.py 10.0.2.13 10.0.2.11 2212 22
+Logged in user is 0	
+Traceback (most recent call last):
+  File "syn_flood.py", line 138, in <module>
+    main()
+  File "syn_flood.py", line 123, in main
+    tcp_header = tcpCreate(args.sip, args.dip, args.sport, args.dport)
+  File "syn_flood.py", line 95, in tcpCreate
+    tcp_checksum = checksum(psh)
+  File "syn_flood.py", line 23, in checksum
+    w = (ord(msg[i]) << 8) + (ord(msg[i+1]))
+TypeError: ord() expected string of length 1, but int found
+
+Fixes applied by removing ord function from checksum function and trying to perform
+bit shifting on the length of the message rather than the internal contents which
+kicks up an error of str
