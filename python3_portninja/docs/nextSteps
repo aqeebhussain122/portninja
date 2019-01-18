@@ -61,7 +61,7 @@ COMPLETED - 15/01/2019
 
 =================================================================================================================================================================================
 
-LOG: 18/01/2019
+LOG: 17/01/2019
 
 Priority 1 component: Work on port scanning capability to scan multiple ports
 
@@ -77,3 +77,11 @@ FOR I IN RANGE 1 TO 65535
 	PRINT("PORT IS OPEN/CLOSED")
 
 Ping sweep method functional, additional steps to add functionality to read number of ports from a file and scan
+===========================================================================================================
+
+LOG: 18/01/2019
+
+Code has been transferred to python 3, two seperate folders made to clearly distinguish
+the specific use of the two different versions, the main issue is to do with indentation, it is simple to use the IDLE and untabify all regions and fix indents
+
+
