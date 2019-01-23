@@ -4,12 +4,14 @@ import sys
 import socket
 import select
 import os
+import os_check
 import subprocess
 import syn_flood
 import ports
 import argparse
 
 def main():
+        os_check.OScheck()
         syn_flood.permissions()
         s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
         syn_flood.createSock(s)
