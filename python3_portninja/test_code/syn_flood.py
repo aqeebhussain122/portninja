@@ -105,7 +105,7 @@ def tcpCreate(source_ip ,dest_ip, source_port, dest_port):
 
 # CHECK LOCAL UID AND PROVIDE RESTRICTION BANNER
 def permissions():
-    if os_check.OScheck == False:
+    if os_check.OScheck == True:
         print("The windows stuff")
     else:
         checkPerms = os.getuid()
