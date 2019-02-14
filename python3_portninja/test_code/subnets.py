@@ -7,6 +7,13 @@
 
 # Calculate the subnets in comparison to the number given using a hash
 # Use hash in main function for ip address
-# 
-def subnet_calc(ip_addr):
-	subnets = []
+#
+def main():
+    # Subnets stored in a hash function mixed with subnetting formula to distigiush hosts from the total addressing 
+    subnets = {'/32': 1, '/31': 2, '/30': 4, '/29' : 8, '/28' : 16, '/27' : 32}
+    print(subnets['/27'])
+
+#def subnet_calc(ip_addr):
+
+
+main()
