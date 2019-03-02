@@ -12,6 +12,7 @@ import argparse
 
 def main():
         os_check.OScheck()
+	# Causing issues for windows
         syn_flood.permissions()
         s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
         syn_flood.createSock(s)
