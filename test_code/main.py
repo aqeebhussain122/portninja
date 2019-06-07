@@ -11,7 +11,6 @@ import ports
 import argparse
 
 def main():
-        os_check.OScheck()
 	# Causing issues for windows
         syn_flood.permissions()
         s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
@@ -51,6 +50,8 @@ def main():
                 for port in args.ports:
                         check_success = ports.TCPportCheck(args.dip, port)
                         check_banner = ports.TCPbannerGrab(args.dip, port)
+
+        # Ping sweep all ports on a machine
         if args.sweep:
                 for i in range(1, 65565):
                         sweep_check = ports.TCPportCheck(args.dip, i)
