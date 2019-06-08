@@ -1,22 +1,22 @@
 #!/usr/bin/python3
 # PORTNINJA: PORT SCANNER DESIGNED TO PERFORM NETWORK RECON OPERATIONS
+# Get the primary IP address with a gateway
+import ip
 import sys
 import socket
 import select
 import os
-import os_check
 import subprocess
-import syn_flood
 import ports
 import argparse
+import syn_flood
 
 def main():
-	# Causing issues for windows
-        syn_flood.permissions()
+	# Raw socket for raw packet
         s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
-        syn_flood.createSock(s)
+        ip_details = ip.get_ip()		
+	# Removed source port from main parser	
         parser = argparse.ArgumentParser(description='SYN Scan and flood tool which forms raw packets taking required IP addresses and port numbers')
-        parser.add_argument("sip", help='Source IP Address to form packet', type=str)
         parser.add_argument("dip", help='Destination IP address to form packet', type=str)
         parser.add_argument("sport", help='Source port to form packet', type=int)
         parser.add_argument("dport", help='Destination port to form packet', type=int)
@@ -27,8 +27,8 @@ def main():
         parser.add_argument("-s", "--sweep", help="Ping sweep through the network", action='store_true')
         args = parser.parse_args()
 
-        ip_header = syn_flood.ipCreate(args.sip, args.dip)
-        tcp_header = syn_flood.tcpCreate(args.sip, args.dip, args.sport, args.dport)
+        ip_header = syn_flood.ipCreate(ip_details, args.dip)
+        tcp_header = syn_flood.tcpCreate(ip_details, args.dip, args.sport, args.dport)
         packet = ip_header + tcp_header
         ports.portNumLimit(args.sport)
         ports.portNumLimit(args.dport)
