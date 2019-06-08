@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 import socket
+import sys
+
 def portNumLimit(port):
     MAX = 65535
     if port < 1 or port > MAX:
@@ -33,15 +35,20 @@ def TCPportCheck(ip_addr, port_temp):
 def TCPbannerGrab(ip_addr, port_num):
 # WORKS WITH TCP CONNECTIONS ONLY
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    #sock.settimeout(5)
+    # Add connection threads to allow a timeout
+
+    #Primary connection is made through this line
     connection = sock.connect_ex((ip_addr, port_num))
     try:
         sock.send(b'GET HTTP/1.1 \r\n')
-        sock.settimeout(5.0)
+        sock.settimeout(5)
         result = sock.recv(1024)
         # Check for HTTP presence in port number and issue a HTTP HEADER REQUEST
         if port_num == 80:
             sock.send('HEAD / HTTP/1.1\nHost:' + ip_addr + '\n\n')
             print("HTTP header is: ")
+        # If the banner contains an empty string but the connection went through`
         if result == "" or None:
             print("Banner not showing up :(")
             sock.close()

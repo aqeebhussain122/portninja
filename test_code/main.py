@@ -9,12 +9,15 @@ import os
 import subprocess
 import ports
 import argparse
-import syn_flood
+# Needs to be reorganised and renamed
+# import syn_flood -> craft
+import craft
 
 def main():
 	# Raw socket for raw packet
         s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
-        ip_details = ip.get_ip()		
+        ip_details = ip.get_ip()
+			
 	# Removed source port from main parser	
         parser = argparse.ArgumentParser(description='SYN Scan and flood tool which forms raw packets taking required IP addresses and port numbers')
         parser.add_argument("dip", help='Destination IP address to form packet', type=str)
@@ -26,12 +29,13 @@ def main():
         parser.add_argument("-p", "--ports", help="Port switch  which will take a number of ports and scan them against destination ip", type=int, nargs='+')
         parser.add_argument("-s", "--sweep", help="Ping sweep through the network", action='store_true')
         args = parser.parse_args()
-
-        ip_header = syn_flood.ipCreate(ip_details, args.dip)
-        tcp_header = syn_flood.tcpCreate(ip_details, args.dip, args.sport, args.dport)
+        #ports.portNumLimit(ip_details)
+        #ports.portNumLimit(args.dip)
+        ip_header = craft.ipCreate(ip_details, args.dip)
+        tcp_header = craft.tcpCreate(ip_details, args.dip, args.sport, args.dport)
         packet = ip_header + tcp_header
-        ports.portNumLimit(args.sport)
-        ports.portNumLimit(args.dport)
+        #ports.portNumLimit(args.sport)
+        #ports.portNumLimit(args.dport)
         print(('IP Address is: ' + args.dip))
         ports.TCPportCheck(args.dip, args.dport)
         print('Performing banner grab')
@@ -51,7 +55,7 @@ def main():
                         check_success = ports.TCPportCheck(args.dip, port)
                         check_banner = ports.TCPbannerGrab(args.dip, port)
 
-        # Ping sweep all ports on a machine
+        # Ping sweep all ports on a machine - freezing up on the first attempt 
         if args.sweep:
                 for i in range(1, 65565):
                         sweep_check = ports.TCPportCheck(args.dip, i)
