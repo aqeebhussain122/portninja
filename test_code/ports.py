@@ -37,8 +37,6 @@ def TCPportCheck(ip_addr, port_temp):
 def TCPbannerGrab(ip_addr, port_num):
 # WORKS WITH TCP CONNECTIONS ONLY
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    #sock.settimeout(5)
-    # Add connection threads to allow a timeout
 
     #Primary connection is made through this line
     connection = sock.connect_ex((ip_addr, port_num))

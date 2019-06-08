@@ -7,6 +7,9 @@ def main():
     if port <= 0 or port >= 65535:
         print("Error: Port number is too high/low")
 
+    for i in range(0, 65565):
+	print("print")
+
 def portNumLimit(port):
     MAX = 65535
     if port < 1 or port > MAX:
