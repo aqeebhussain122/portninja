@@ -29,8 +29,8 @@ def main():
         parser.add_argument("-p", "--ports", help="Port switch  which will take a number of ports and scan them against destination ip", type=int, nargs='+')
         parser.add_argument("-s", "--sweep", help="Ping sweep through the network", action='store_true')
         args = parser.parse_args()
-        #ports.portNumLimit(ip_details)
-        #ports.portNumLimit(args.dip)
+	ports.portNumLimit(args.sport)
+        ports.portNumLimit(args.dport)
         ip_header = craft.ipCreate(ip_details, args.dip)
         tcp_header = craft.tcpCreate(ip_details, args.dip, args.sport, args.dport)
         packet = ip_header + tcp_header
@@ -62,6 +62,3 @@ def main():
 
 if __name__ == '__main__':
         main()
-
-# Working version of Python - Python 2.7.15rc1
-

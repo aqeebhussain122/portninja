@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 import socket
+
 import sys
 
 def portNumLimit(port):
+    num = int(port)
     MAX = 65535
-    if port < 1 or port > MAX:
+    if num < 1 or num > MAX:
         print(("Error: Ensure the specified port number is within the limit of: 1 - {}".format(MAX)))
         sys.exit(1)
     else:
@@ -48,7 +50,8 @@ def TCPbannerGrab(ip_addr, port_num):
         if port_num == 80:
             sock.send('HEAD / HTTP/1.1\nHost:' + ip_addr + '\n\n')
             print("HTTP header is: ")
-        # If the banner contains an empty string but the connection went through`
+        # If the banner contains an empty string but the connection went through
+
         if result == "" or None:
             print("Banner not showing up :(")
             sock.close()
