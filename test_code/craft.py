@@ -105,15 +105,12 @@ def tcpCreate(source_ip ,dest_ip, source_port, dest_port):
 
 # CHECK LOCAL UID AND PROVIDE RESTRICTION BANNER
 def permissions():
-    if os_check.OScheck == True:
-        print("The windows stuff")
+    checkPerms = os.getuid()
+    if checkPerms != 0:
+        print("The logged in user is not root")
+        sys.exit(0)
     else:
-        checkPerms = os.getuid()
-        if checkPerms != 0:
-            print("The logged in user is not root")
-            sys.exit(0)
-        else:
-            return 0
+        return 0
 
     return checkPerms
 
