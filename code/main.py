@@ -13,10 +13,10 @@ import craft
 
 def main():
 	# Raw socket for raw packet
-	s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
-	ip_details = ip.get_ip()
-
-	parser = argparse.ArgumentParser(description='SYN Scan and flood tool which forms raw packets taking required IP addresses and port numbers')
+        craft.permissions()
+        s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
+        ip_details = ip.get_ip()
+        parser = argparse.ArgumentParser(description='SYN Scan and flood tool which forms raw packets taking required IP addresses and port numbers')
 	parser.add_argument("destination_ip", help='Destination IP address to form packet', type=str)
 	parser.add_argument("source_port", help='Source port to form packet', type=int)
 	parser.add_argument("destination_port", help='Destination port to form packet', type=int)
