@@ -2,6 +2,7 @@
 
 import socket
 import sys
+import ports
 from struct import *
 
 # Global list to store the error messages
@@ -121,6 +122,9 @@ def main():
 	# Attempt to check if data has actually been sent - s.sendto(packet, ('source_ip' << THIS DETERMINES SUCCESS), 0 ))
 	result = s.sendto(packet, (dest_ip, 0))
 	print(('Packet size is {}'.format(result)))
+	port_status = ports.TCPportCheck(dest_ip, dest_port)
+	port_banner = ports.TCPbannerGrab(dest_ip, dest_port)
+	print("Port status is {} \n Port banner is {}".format(port_status, port_banner))
 	# TO TEST THIS PROGRAM LAUNCH IN PYTHON AND OPEN WIRESHARK ON THE SPECIFIED NETWORK INTERFACE
 
 main()
