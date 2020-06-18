@@ -38,15 +38,15 @@ def TCPbannerGrab(ip_addr, port_num):
 # WORKS WITH TCP CONNECTIONS ONLY
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    #Primary connection is made through this line
+    # Primary connection is made through this line - TCP connection
     connection = sock.connect_ex((ip_addr, port_num))
     try:
-        sock.send(b'GET HTTP/1.1 \r\n')
+        sock.send(b'GET HTTP/1.1 \r\n\r\n')
         sock.settimeout(5)
         result = sock.recv(1024)
         # Check for HTTP presence in port number and issue a HTTP HEADER REQUEST
         if port_num == 80:
-            sock.send('HEAD / HTTP/1.1\nHost:' + ip_addr + '\n\n')
+            #sock.send('HEAD / HTTP/1.1\nHost:' + ip_addr + '\n\n')
             print("HTTP header is: ")
         # If the banner contains an empty string but the connection went through
 

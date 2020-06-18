@@ -85,4 +85,12 @@ Code has been transferred to python 3, two seperate folders made to clearly dist
 the specific use of the two different versions, the main issue is to do with indentation, it is simple to use the IDLE and untabify all regions and fix indents
 
 
+LOG: 02/05/2020
 
+Code has been extended. And some features have been recommended.
+
+Feature #1: SYN Flood friendly fire mode (Using the existing hosts on the network, network packet forgery is able to impersonate live hosts which attack other live hosts, causing mass confusion resulting in machines being shutdown)
+
+Feature #2: MAC address forgery: The same way the tool can craft non-existing IP packets, the tool can also craft MAC addresses the same way which masks the original location
+
+Add in packet forgery into the main program as an option  

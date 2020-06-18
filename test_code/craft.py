@@ -2,10 +2,11 @@
 import os
 import socket
 import sys
-import os_check
 from struct import *
 # argparser to take arguments correctly
 import argparse
+#import get_ip
+import ports
 # Global list to store the error messages
 error_msg = []
 
@@ -98,24 +99,11 @@ def tcpCreate(source_ip ,dest_ip, source_port, dest_port):
 
     # Checksum function using push flag
     tcp_checksum = checksum(psh)
-    print(tcp_checksum)
 
     tcp_header = pack('!HHLLBBHHH', source_port, dest_port, seq, ack_seq, offset_res, tcp_flags, window, tcp_checksum, urg_ptr)
     return tcp_header
 
-# CHECK LOCAL UID AND PROVIDE RESTRICTION BANNER
-def permissions():
-    checkPerms = os.getuid()
-    if checkPerms != 0:
-        print("The logged in user is not root")
-        sys.exit(0)
-    else:
-        return 0
-
-    return checkPerms
-
 def main():
-    print(("Logged in user is {}".format(permissions())))
     s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
     createSock(s)
     parser = argparse.ArgumentParser(description='SYN Scan and flood tool which forms raw packets taking required IP addresses and port numbers')
@@ -140,6 +128,9 @@ def main():
     else:
         print("Flood option was not chosen, sending 1 packet to initiate SYN scan")
         result = s.sendto(packet, (args.dip, 0))
+        port_status = ports.TCPportCheck(args.dip, args.dport)
+        port_banner = ports.TCPbannerGrab(args.dip, args.dport)
+
 
     # TO TEST THIS PROGRAM LAUNCH IN PYTHON AND OPEN WIRESHARK ON THE SPECIFIED NETWORK INTERFACE
 #main()

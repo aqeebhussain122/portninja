@@ -4,15 +4,14 @@ import socket
 import sys
 import ports
 from struct import *
+import argparse
+import time
 
 # Global list to store the error messages
 error_msg = []
 
-def usage():
-	if(len(sys.argv) <= 3):
-		print('Not enough arguments')
 
-def createSock(s):
+def createSock():
 	try:
 		s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
 	except socket.error as error_msg:
@@ -24,8 +23,10 @@ def createSock(s):
 def checksum(msg):
 	s = 0
 	for i in range(0, len(msg), 2):
-		w = (ord(msg[i]) << 8) + (ord(msg[i+1]))
-		s += w
+		# w = (ord(msg[i]) << 8) + (ord(msg[i+1]))
+    # Ord call is removed for code to function correctly with Python
+                w = (msg[i]) << 8 + (msg[i+1])
+                s += w
 	s = (s >> 16) + (s & 0xffff)
 	s = ~s & 0xffff
 	return s
@@ -61,6 +62,7 @@ def ipCreate(source_ip, dest_ip):
 
 # SYN Packet is created from the function containing the flags
 def tcpCreate(source_ip ,dest_ip, source_port, dest_port):
+# IP Values are defined in the function, allowing them to be used more flexibly
 #	source_ip = '10.0.2.7'
 #	dest_ip = '10.0.2.12'
 	seq = 0
@@ -109,22 +111,44 @@ def tcpCreate(source_ip ,dest_ip, source_port, dest_port):
 	return tcp_header
 
 def main():
-	s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
-	createSock(s)
-	usage()
-	source_ip = (str(sys.argv[1]))
-	dest_ip = (str(sys.argv[2]))
-	source_port = (int(sys.argv[3]))
-	dest_port = (int(sys.argv[4]))
-	ip_header = ipCreate(source_ip, dest_ip)
-	tcp_header = tcpCreate(source_ip, dest_ip, source_port, dest_port)
-	packet = ip_header + tcp_header
-	# Attempt to check if data has actually been sent - s.sendto(packet, ('source_ip' << THIS DETERMINES SUCCESS), 0 ))
-	result = s.sendto(packet, (dest_ip, 0))
-	print(('Packet size is {}'.format(result)))
-	port_status = ports.TCPportCheck(dest_ip, dest_port)
-	port_banner = ports.TCPbannerGrab(dest_ip, dest_port)
-	print("Port status is {} \n Port banner is {}".format(port_status, port_banner))
-	# TO TEST THIS PROGRAM LAUNCH IN PYTHON AND OPEN WIRESHARK ON THE SPECIFIED NETWORK INTERFACE
+        parser = argparse.ArgumentParser()
+        parser.add_argument("source_ip", help="Name of IP address to originate the request from (The spoofed address) ")
+        parser.add_argument("source_port", help="Custom port to generate with the spoofed packet", type=int)
+        parser.add_argument("destination_ip", help="Name of target IP address to enumerate")
+        parser.add_argument("destination_port", help="Target port to enumerate", type=int)
+        parser.add_argument("-p", "--ports", help="Port switch  which will take a number of ports and scan them against destination ip", type=int, nargs='+')
+        parser.add_argument("sleep_time", help="Quantity of time to sleep before pinging the next host", type=int)
+        args = parser.parse_args()
 
+        s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
+
+        # ip_header = ipCreate(source_ip, dest_ip)
+        ip_header = ipCreate(args.source_ip, args.destination_ip)
+        # tcp_header = tcpCreate(source_ip, dest_ip, source_port, dest_port)
+        ports.portNumLimit(args.source_port)
+        ports.portNumLimit(args.destination_port)
+        tcp_header = tcpCreate(args.source_ip, args.destination_ip, args.source_port, args.destination_port)
+        packet = ip_header + tcp_header
+	# Attempt to check if data has actually been sent - s.sendto(packet, ('source_ip' << THIS DETERMINES SUCCESS), 0 ))
+        sleep = time.sleep(args.sleep_time)
+        result = s.sendto(packet, (args.destination_ip, 0))
+        print(('Packet size is {}'.format(result)))
+        print ('Target IP address: {}'.format(args.destination_ip))
+        port_status = ports.TCPportCheck(args.destination_ip, args.destination_port)
+        print ('Performing banner grab')
+        port_banner = ports.TCPbannerGrab(args.destination_ip, args.destination_port)
+        #print("{} \n {}".format(port_status, port_banner))
+        #print("Port banner is {}".format(port_banner))
+	# TO TEST THIS PROGRAM LAUNCH IN PYTHON AND OPEN WIRESHARK ON THE SPECIFIED NETWORK INTERFACE
+        if args.ports:
+            for port in args.ports:
+                ip_header = ipCreate(args.source_ip, args.destination_ip)
+                tcp_header = tcpCreate(args.source_ip, args.destination_ip, args.source_port, port)
+                ports.portNumLimit(args.source_port)
+                ports.portNumLimit(args.destination_port)                
+                packet = ip_header + tcp_header
+                sleep = time.sleep(args.sleep_time)                
+                #result = s.sendto(packet, (args.destination_ip, 0))
+                check_success = ports.TCPportCheck(args.destination_ip, port)
+                check_banner = ports.TCPbannerGrab(args.destination_ip, port)
 main()

@@ -30,3 +30,8 @@ Ensure data is fully error handled and program output is reliable
 Packet injection from crafted packet using raw socket
 Testing should be carried out on all platforms possible with a testing document to be submitted
 
+## SYN flooding friendly fire mode
+- Network host discovery scan to find alive hosts with randomised MAC/IP and lengthy sleep times  
+- Using legitimate addresses of those on the network.  
+- Attack all the hosts against each other
+- 
