@@ -26,11 +26,11 @@ def main():
         parser.add_argument("-p", "--ports", help="Port switch  which will take a number of ports and scan them against destination ip", type=int, nargs='+')
         # Verbose level 1 (Regular scan of top 1,000 ports)
         parser.add_argument("-v1", "--verbose-one", help=" Verbose level 1", type=int)
-        parser.add_argument("-s", "--sweep", help="Port sweep through the network", action='store_true')
+        parser.add_argument("-s", "--sweep", help="Port sweep of target", action='store_true')
         args = parser.parse_args()
         ports.portNumLimit(args.source_port)
         ports.portNumLimit(args.destination_port)
-        # TCP packets are crafted from scratch - no forgery done unless specified with -s switch
+        # TCP packets are crafted from scratch - no forgery done unless specified with -x switch
         ip_header = craft.ipCreate('127.0.0.1', args.destination_ip)
         tcp_header = craft.tcpCreate('127.0.0.1', args.destination_ip, args.source_port, args.destination_port)
         packet = ip_header + tcp_header
@@ -64,23 +64,12 @@ def main():
                         check_banner = ports.TCPbannerGrab(args.destination_ip, port)
                         time.sleep(2)
 
-        #if args.verbose-one:
-        #    print("jshj")
-
-
         if args.forge:
            print("Forged IP address: %s" % (args.forge))
            ip_header = craft.ipCreate(args.forge, args.destination_ip)
            tcp_header = craft.tcpCreate(args.forge, args.destination_ip, args.source_port, args.destination_port)
            packet = ip_header + tcp_header
            result = s.sendto(packet, (args.destination_ip, 0))
-           #check_success = ports.TCPportCheck(args.destination_ip, args.destination_port)
-           #check_banner = ports.TCPbannerGrab(args.destination_ip, args.destination_port)
-
-        print("Flood option was not chosen, sending 1 packet to initiate SYN scan")
-        #result = s.sendto(packet, (args.destination_ip, 0))
-        #port_status = ports.TCPportCheck(args.destination_ip, args.destination_port)
-        #port_banner = ports.TCPbannerGrab(args.destination_ip, args.destination_port)
 
 if __name__ == '__main__':
         main()

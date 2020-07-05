@@ -192,3 +192,20 @@ TypeError: ord() expected string of length 1, but int found
 Fixes applied by removing ord function from checksum function and trying to perform
 bit shifting on the length of the message rather than the internal contents which
 kicks up an error of str
+
+05/07/2020
+Functionality issues of tool such as IP addressing can be input incorrectly which causes the program to crash
+
+RESULT:
+IP Address is: 192.16.2
+^CPerforming banner grab
+^CTraceback (most recent call last):
+  File "../test_code/main.py", line 79, in <module>
+    main()
+  File "../test_code/main.py", line 43, in main
+    ports.TCPbannerGrab(args.destination_ip, args.destination_port)
+  File "/root/Documents/portninja/test_code/ports.py", line 41, in TCPbannerGrab
+    connection = sock.connect_ex((ip_addr, port_num))
+KeyboardInterrupt
+
+The program had to be manually exited
