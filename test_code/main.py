@@ -64,8 +64,8 @@ def main():
                         check_banner = ports.TCPbannerGrab(args.destination_ip, port)
                         time.sleep(2)
 
-        if args.verbose-one:
-            print("jshj")
+        #if args.verbose-one:
+        #    print("jshj")
 
 
         if args.forge:
