@@ -62,3 +62,6 @@ def TCPbannerGrab(ip_addr, port_num):
         print(("Exception", error))
     finally:
         sock.close()
+
+# Add a list or something of all the different ports or something
+#def ports_classification():
