@@ -34,8 +34,8 @@ def main():
         ip_header = craft.ipCreate('127.0.0.1', args.destination_ip)
         tcp_header = craft.tcpCreate('127.0.0.1', args.destination_ip, args.source_port, args.destination_port)
         packet = ip_header + tcp_header
-        #ports.portNumLimit(args.source_port)
-        #ports.portNumLimit(args.destination_port)
+        # inet_aton checks the validity of the IP: https://stackoverflow.com/questions/10086572/ip-address-validation-in-python-using-regex
+        dest_ip_check = socket.inet_aton(args.destination_ip)
         print(('IP Address is: ' + args.destination_ip))
 
         ports.TCPportCheck(args.destination_ip, args.destination_port)
