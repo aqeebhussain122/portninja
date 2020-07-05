@@ -116,9 +116,7 @@ def main():
         parser.add_argument("source_port", help="Custom port to generate with the spoofed packet", type=int)
         parser.add_argument("destination_ip", help="Name of target IP address to enumerate")
         parser.add_argument("destination_port", help="Target port to enumerate", type=int)
-        parser.add_argument("-f", "--flood", help="SYN Flood option to send arbituary number of packets to flood device or network", type=int)
         parser.add_argument("-p", "--ports", help="Port switch  which will take a number of ports and scan them against destination ip", type=int, nargs='+')
-        
         parser.add_argument("sleep_time", help="Quantity of time to sleep before pinging the next host", type=int)
         args = parser.parse_args()
 
@@ -153,14 +151,4 @@ def main():
                 #result = s.sendto(packet, (args.destination_ip, 0))
                 check_success = ports.TCPportCheck(args.destination_ip, port)
                 check_banner = ports.TCPbannerGrab(args.destination_ip, port)
-
-        if args.flood:
-                print("Flood option selected: Sending packets...")
-                i = 0
-                value = int(args.flood)
-                while i < value:
-                        i += 1
-                        print(("Packets sent: {}".format(i)))
-                        result = s.sendto(packet, (args.destination_ip, 0))
-
 main()

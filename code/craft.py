@@ -6,6 +6,7 @@ from struct import *
 # argparser to take arguments correctly
 import argparse
 #import get_ip
+import ports
 # Global list to store the error messages
 error_msg = []
 
@@ -127,6 +128,9 @@ def main():
     else:
         print("Flood option was not chosen, sending 1 packet to initiate SYN scan")
         result = s.sendto(packet, (args.dip, 0))
+        port_status = ports.TCPportCheck(args.dip, args.dport)
+        port_banner = ports.TCPbannerGrab(args.dip, args.dport)
+
 
     # TO TEST THIS PROGRAM LAUNCH IN PYTHON AND OPEN WIRESHARK ON THE SPECIFIED NETWORK INTERFACE
 #main()

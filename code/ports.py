@@ -1,7 +1,17 @@
 #!/usr/bin/python3
 import socket
-
 import sys
+
+"""
+def probeHost(ip):
+   icmp = IP(dst=ip)/ICMP()
+   response = sr1(icmp, timeout=10)
+   if response == None:
+       print("Host is dead, Big F.")
+       sys.exit(1)
+   else:
+       print("The host is alive")
+"""
 
 def portNumLimit(port):
     num = int(port)
