@@ -94,3 +94,17 @@ Feature #1: SYN Flood friendly fire mode (Using the existing hosts on the networ
 Feature #2: MAC address forgery: The same way the tool can craft non-existing IP packets, the tool can also craft MAC addresses the same way which masks the original location
 
 Add in packet forgery into the main program as an option  
+
+07/07/2020
+
+Shellshock detection
+
+NMAP/NIKTO/GOBUSTER
+
+nmap the machine for all the ports
+
+nikto the server for vulns
+
+check if cgi-bin exists or not?
+
+If cgi-bin exists then start bruteforcing/web crawling that directory and try to find a page
