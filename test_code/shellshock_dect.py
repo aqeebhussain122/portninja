@@ -1,5 +1,5 @@
 import ports
-
+import sys
 def scan_http(ip_addr):
     # Add 4 variables of the HTTP ports as boolean
     
@@ -26,6 +26,7 @@ def scan_http(ip_addr):
         print("Not successful value: {}".format(not_successful))
     ''' 
     for port in http_ports:
+        # Grabs the exit code of the function - 0 = success, 111 = error
         result = ports.TCPportCheck(ip_addr, port)
         if(result == 0):
             successful += 1
@@ -35,7 +36,7 @@ def scan_http(ip_addr):
         #print("Not successful {}".format(not_successful))
 
     if(successful == 0):
-        print("Found no ports open")
+        print("Found no HTTP ports open, ima dip")
     '''
     Trying to pull out the success codes of each port response
     using if statements with successful and not_successful, increment the variables and print them
@@ -49,11 +50,11 @@ def scan_http(ip_addr):
     print(single_check_2)
     '''
     # END OF FOR LOOP
-
     return ip_addr
 
 def main():
-    http_scan = scan_http("192.168.0.100")
+    #http_scan = scan_http("192.168.0.100")
+    http_scan = scan_http(sys.argv[1])
 main()
         
 #def main():
