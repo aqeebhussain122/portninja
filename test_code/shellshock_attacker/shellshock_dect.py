@@ -1,6 +1,9 @@
 import ports
 import sys
 
+'''
+Use an internal HTTP list of ports which will be scanned for being open/closed with 1 and 0
+'''
 def scan_http(ip_addr):
     # Using these to check if the ports are open or not
     ports_open = 0
@@ -10,8 +13,15 @@ def scan_http(ip_addr):
     http_port_88 = 88
     http_port_443 = 443
     http_port_8080 = 8080
-    #http_ports = [80,88,443,8080]
-    http_ports = [http_port_80,http_port_88,http_port_443,http_port_8080]
+    '''
+    These are the main http ports which need to be split to two more sublists of open_http_ports and closed_http_ports.
+    This can be used further for processing in the other functions
+    '''
+    http_ports = [80,88,443,8080]
+    # Sublists for the open and closed ports
+    http_open_ports = []
+    http_closed_ports = []
+    #http_ports = [http_port_80,http_port_88,http_port_443,http_port_8080]
     # error_exit = 0
     '''
     single_check = ports.TCPportCheck(ip_addr, 80)
@@ -29,11 +39,27 @@ def scan_http(ip_addr):
         result = ports.TCPportCheck(ip_addr, port)
         if(result == 0):
             # Add in another list which associates to ports_open which can then be used for the requests
+            # Currently only counters are placed to satisfy error conditions, no ports are being attached to the counters.
             ports_open += 1
+            http_open_ports.append(port)
         elif(result == 111):
             ports_not_open += 1
+            http_closed_ports.append(port)
+        else:
+            pass
 
-
+    '''
+    string_http_open_ports = [str(open_ports) for open_ports in http_open_ports]
+    encoded_open_ports = ",".join(string_http_open_ports)
+    print("Open ports are {}".format(encoded_open_ports))
+    print("Closed ports are: {}".format(http_closed_ports))        
+    '''
+    
+    # If the list is empty
+    if not http_open_ports:
+        print("No ports open, ima dip")
+    else:
+        print("I found some ports")
         #print("Successful {}".format(successful))
         #print("Not successful {}".format(not_successful))
 
@@ -52,13 +78,14 @@ def scan_http(ip_addr):
     '''
 
     '''
-    print(single_check)
+    rint(single_check)
     print(single_check_1)
     print(single_check_2)
     '''
-    # END OF FOR LOOP
-    # return ip_addr
+    # This counter is to check for the 
     return ports_open
+
+    # Return the list elements of an 
     #return error_exit
 
 #def cgi_bin_detector(url, port):
@@ -70,15 +97,19 @@ def main():
 
     http_scan = scan_http(ip_addr)
     print("Target IP address: {}".format(ip_addr))
+
+
+    # This if/else logic needs to be sorted out
+    '''
     if(http_scan == 0):
         print("[+] No HTTP ports found, shellshock module exiting... [+]")
-        sys.exit(1)
+       #sys.exit(1)
     elif(http_scan != 0):
         print("Detected {} HTTP port(s) open \nLooking for cgi-bin....".format(http_scan))
     else:
         pass
-    #This segment now works and we now need to send a request to the server with the 
-    
+    #This segment now works and we now need to send a request to the server with the  
+    '''
 
     '''
     We want the return code of http_scan to proceed accordingly.
