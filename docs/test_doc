@@ -213,3 +213,5 @@ The program had to be manually exited
 When the program connects to Windows machines or any IP addresses which have previously connected machines, the tool hangs when processing the ports
 
 Function return: 80,443 <- What the shellshock port function output looks like when there's more than one port
+
+Need to extract the open ports from the python list and pass them out
