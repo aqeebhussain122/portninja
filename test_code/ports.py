@@ -56,6 +56,7 @@ def TCPbannerGrab(ip_addr, port_num):
             sock.close()
             return result
     except IOError as error:
+        # Setting 5 seconds to timeout the socket connection when there's an error
         sock.settimeout(5.0)
         if sock == socket.error:
             print("Making the socket didn't work :(")
