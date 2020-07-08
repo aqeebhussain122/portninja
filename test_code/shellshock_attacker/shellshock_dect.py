@@ -1,5 +1,6 @@
 import ports
 import sys
+
 def scan_http(ip_addr):
     # Using these to check if the ports are open or not
     ports_open = 0
@@ -27,9 +28,12 @@ def scan_http(ip_addr):
         # Grabs the exit code of the function - 0 = success, 111 = error
         result = ports.TCPportCheck(ip_addr, port)
         if(result == 0):
+            # Add in another list which associates to ports_open which can then be used for the requests
             ports_open += 1
         elif(result == 111):
             ports_not_open += 1
+
+
         #print("Successful {}".format(successful))
         #print("Not successful {}".format(not_successful))
 
@@ -57,25 +61,29 @@ def scan_http(ip_addr):
     return ports_open
     #return error_exit
 
+#def cgi_bin_detector(url, port):
+
 def main():
     # This is the output of the IP address, not the function return
     #http_scan = scan_http("192.168.0.100")
-    '''
-    http_scan = scan_http(sys.argv[1])
+    ip_addr = sys.argv[1]
+
+    http_scan = scan_http(ip_addr)
+    print("Target IP address: {}".format(ip_addr))
     if(http_scan == 0):
-        print("[+] No HTTP ports found, shellshock module exiting...")
+        print("[+] No HTTP ports found, shellshock module exiting... [+]")
         sys.exit(1)
     elif(http_scan != 0):
         print("Detected {} HTTP port(s) open \nLooking for cgi-bin....".format(http_scan))
     else:
         pass
-    This segment now works and we now need to send a request to the server with the 
-    '''
+    #This segment now works and we now need to send a request to the server with the 
+    
 
     '''
     We want the return code of http_scan to proceed accordingly.
     By extracting the ports_open counter and measuring the if/else logic of 0 http ports being open
-    then the program should exit from trying to identify the presence of a cgi-bin directory. 
+    then the program should exit from trying to identify the presence of a cgi-bin directory.
     '''
 main()
         
