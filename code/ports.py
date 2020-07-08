@@ -2,17 +2,6 @@
 import socket
 import sys
 
-"""
-def probeHost(ip):
-   icmp = IP(dst=ip)/ICMP()
-   response = sr1(icmp, timeout=10)
-   if response == None:
-       print("Host is dead, Big F.")
-       sys.exit(1)
-   else:
-       print("The host is alive")
-"""
-
 def portNumLimit(port):
     num = int(port)
     MAX = 65535
@@ -35,7 +24,7 @@ def TCPportCheck(ip_addr, port_temp):
                    print(("Port {} open".format(port_temp)))
                    sock.close()
         else:
-                   print(("Port {} is closed".format(port_temp)))
+                   print(("Port {} closed".format(port_temp)))
         sock.close()
         return result
     except:
@@ -47,7 +36,7 @@ def TCPportCheck(ip_addr, port_temp):
 def TCPbannerGrab(ip_addr, port_num):
 # WORKS WITH TCP CONNECTIONS ONLY
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
+    # encoding of ip_addr to send a proper HTTP request
     # Primary connection is made through this line - TCP connection
     connection = sock.connect_ex((ip_addr, port_num))
     try:
@@ -55,9 +44,8 @@ def TCPbannerGrab(ip_addr, port_num):
         sock.settimeout(5)
         result = sock.recv(1024)
         # Check for HTTP presence in port number and issue a HTTP HEADER REQUEST
-        if port_num == 80:
-            #sock.send('HEAD / HTTP/1.1\nHost:' + ip_addr + '\n\n')
-            print("HTTP header is: ")
+        #if port_num == 80:
+            #sock.send(b'HEAD / HTTP/1.1\nHost:' + b'\n' + '\n\n')
         # If the banner contains an empty string but the connection went through
 
         if result == "" or None:
@@ -68,9 +56,13 @@ def TCPbannerGrab(ip_addr, port_num):
             sock.close()
             return result
     except IOError as error:
+        # Setting 5 seconds to timeout the socket connection when there's an error
         sock.settimeout(5.0)
         if sock == socket.error:
             print("Making the socket didn't work :(")
         print(("Exception", error))
     finally:
         sock.close()
+
+# Add a list or something of all the different ports or something
+#def ports_classification():
