@@ -24,7 +24,7 @@ def TCPportCheck(ip_addr, port_temp):
                    print(("Port {} open".format(port_temp)))
                    sock.close()
         else:
-                   print(("Port {} is closed".format(port_temp)))
+                   print(("Port {} closed".format(port_temp)))
         sock.close()
         return result
     except:
