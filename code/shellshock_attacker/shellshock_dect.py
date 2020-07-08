@@ -59,8 +59,15 @@ def scan_http(ip_addr):
         print("No ports open, aight imma head out")
         sys.exit(1)
     else:
-        print("Open port(s) are {}".format(http_open_ports))
-        print("Closed port(s) are {}".format(http_closed_ports))
+        '''
+        Printing out the ports is pointless because ports.py does it 
+        for i in range(len(http_open_ports)):
+            print("Open: {}".format(http_open_ports[i]))
+        
+        for i in range(len(http_closed_ports)):
+            print("Closed: {}".format(http_closed_ports[i]))
+        '''
+
         '''
         string_http_open_ports = [str(open_ports) for open_ports in http_open_ports]
         # Replaced the [] with a space
@@ -95,7 +102,7 @@ def scan_http(ip_addr):
     '''
     # This counter is to check for the 
     return http_open_ports
-
+#
     # Return the list elements of an 
     #return error_exit
 
@@ -110,9 +117,13 @@ def main():
     Get the open ports, make sure they're integers and then pass them through to the needed functions
     '''
     http_scan = scan_http(ip_addr)
-    open_ports_amount = len(http_scan)
+    #open_ports_amount = len(http_scan)
+    #for i in range(len(http_scan)):
+    #    print("Open ports are: {}".format(http_scan[i]))
+    #    print(type(http_scan[i]))
+
     print("Target IP address: {}".format(ip_addr))
-    print("Function return: {}\nFunction data type: {}".format(http_scan, type(http_scan)))
+    #print("Function return: {}\nFunction data type: {}".format(http_scan, type(http_scan)))
 
     '''
     list to integer procedure (Maybe)
