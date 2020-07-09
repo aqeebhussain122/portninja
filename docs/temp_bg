@@ -1,9 +1,10 @@
-All the error handling happens in the scan_http function
-List extraction is done in main()
-
-function extract_cgi_url 
-
-HTTP status code is collected using GET not HEAD
+Other:
+  All the error handling happens in the scan_http function
+  HTTP status code is collected using GET not HEAD
+-----------------------------
+main()
+  List extraction is done in main()
+  Most outputs are done in main()
 
 -----------------------------
 sys.exits:
