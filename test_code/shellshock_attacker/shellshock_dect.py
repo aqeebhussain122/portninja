@@ -48,9 +48,6 @@ def extract_cgi_url(ip_addr, port):
     
     return cgi_req_url
 
-def cgi_bin_crawler():
-    return
-
 '''
 Use an internal HTTP list of ports which will be scanned for being open/closed with 1 and 0
 '''
@@ -84,6 +81,9 @@ def scan_http(ip_addr):
         sys.exit(1)
 
     return http_open_ports
+
+def cgi_crawler_bin():
+    return
 
 def main():
     ip_addr = sys.argv[1]

@@ -37,17 +37,18 @@ def validate_wordlist(wordlist, remote_host):
         print('[!] Error: Failed to read file..\n')
         sys.exit(1)
 
-def checkPath(path, ip_addr, port):
+def checkPath(word, url):
     try:
         # Check for cgi-bin
                           # Use the extracted url here instead of doing this string shit
         #response = requests.get('http://' + remote_host + '/cgi-bin' + path).status_code
-        response = requests.get().status_code
+        response = requests.get(url).status_code
     except Exception:
         print ('[!] An error occured')
         sys.exit(1)
     if response == 200:
-        print("Found: /{}".format(path))
+        # If the word is found in the cgi-bin directory
+        print("Found: /cgi-bin/{}".format(path))
     return response
 
 #def main():
