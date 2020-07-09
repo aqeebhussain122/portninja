@@ -215,3 +215,19 @@ When the program connects to Windows machines or any IP addresses which have pre
 Function return: 80,443 <- What the shellshock port function output looks like when there's more than one port
 
 Need to extract the open ports from the python list and pass them out
+
+
+## CGI function testing - Shellshock component
+The CGI function indivdiually takes each port number and tries to detect the cgi-bin page and will try to crawl through the wordlist
+
+The target port for CGI function is 80
+Open HTTP ports are: 443
+The target port for CGI function is 443
+Target IP address: 192.168.1.1
+
+
+
+All the error handling happens in the scan_http function
+List extraction is done in main()
+
+cgi_bin_detector and word_list_application are done in the same function.
