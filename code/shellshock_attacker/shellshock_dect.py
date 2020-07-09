@@ -1,5 +1,30 @@
 import ports
 import sys
+import requests
+
+'''
+Make an HTTP request to the available ports and append /cgi-bin and get the return code of it
+'''
+def cgi_enum(ip_addr, port):
+    '''
+    Booleans used for future use
+    '''
+    cgi_bin_exists = False
+    https = True
+    
+    print("The target port for CGI function is {}".format(port))
+
+    # If port not 443 then don't use an HTTPS query
+    if port != 443:
+        cgi_req = requests.Request('GET', 'http://{}:{}/cgi-bin'.format(ip_addr,port))
+        prep = cgi_req.prepare()
+        cgi_url = prep.url
+    else:
+        cgi_req = requests.Request('GET', 'https://{}:{}/cgi-bin'.format(ip_addr, port)) 
+        prep = cgi_req.prepare()
+        cgi_url = prep.url
+
+    return cgi_url
 
 '''
 Use an internal HTTP list of ports which will be scanned for being open/closed with 1 and 0
@@ -7,14 +32,13 @@ Use an internal HTTP list of ports which will be scanned for being open/closed w
 def scan_http(ip_addr):
     # Using these to check how many ports are open/closed
     ports_open = 0
-    ports_not_open = 0
-   
+    ports_not_open = 0 
+
     http_ports = (80,88,443,8080)
     # Sublists for the open and closed ports
-    #http_open_ports = []
     http_open_ports = []
     http_closed_ports = []
-
+    
     for port in http_ports:
         # Grabs the exit code of the function - 0 = success, 111 = error
         result = ports.TCPportCheck(ip_addr, port)
@@ -33,18 +57,20 @@ def scan_http(ip_addr):
     if not http_open_ports:
         print("No ports open, aight imma head out")
         sys.exit(1)
-        
+
     return http_open_ports
 
-
-#def cgi_bin_detector(url, port):
-
 def main():
-    # IP address is separate variable instead of being part 
     ip_addr = sys.argv[1]
-
-    # Contains the open ports which are the return values from this function
-    http_scan = scan_http(ip_addr)
     print("Target IP address: {}".format(ip_addr))
+    # Contains the open ports which are the return values from this function
+    open_http_ports = scan_http(ip_addr)
+    
+    #open_ports_amount = len(http_scan)
+    # Looping through by the number of open ports
+    for port in range(len(open_http_ports)):
+        print("Open HTTP ports are: {}".format(open_http_ports[port]))
+        target_url = cgi_enum(ip_addr, open_http_ports[port])
+        print("Target URL: {}".format(target_url))
 
 main()
