@@ -1,5 +1,37 @@
 import ports
 import sys
+import requests
+
+'''
+Make an HTTP request to the available ports and append /cgi-bin and get the return code of it
+'''
+def cgi_enum(ip_addr, port):
+    cgi_bin_exists = False
+    '''
+    1. Make an HTTP request to the given ip and port
+    2. IP & port need to be variable
+    '''
+    print("The target port for CGI function is {}".format(port))
+    # That is the url with ip address as variable
+
+    # If port not 443 then don't use an HTTPS query
+    if port != 443:
+        # Do an HTTP query if not 443
+        cgi_req = requests.get('http://{}:{}/cgi-bin'.format(ip_addr,port))
+    else:
+        cgi_req = requests.get('https://{}:{}/cgi-bin'.format(ip_addr,port))
+
+    req_status_code = cgi_req.status_code
+    if req_status_code == 403 or req_status_code == 200 or req_status_code == 301:
+        cgi_bin_exists = True
+        print("CGI-BIN potentially exists")
+    elif(req_status_code == 404):
+        print("CGI-BIN not found")
+        pass
+    else:
+        pass
+    #print("Target server with CGI-BIN status is: {}".format(cgi_req))
+    return req_status_code
 
 '''
 Use an internal HTTP list of ports which will be scanned for being open/closed with 1 and 0
@@ -110,20 +142,32 @@ def scan_http(ip_addr):
 def main():
     # IP address is separate variable instead of being part 
     ip_addr = sys.argv[1]
-
+    print("Target IP address: {}".format(ip_addr))
     # Contains the open ports which are the return values from this function
     '''
     Get the open ports, make sure they're integers and then pass them through to the needed functions
     '''
-    http_scan = scan_http(ip_addr)
+    open_http_ports = scan_http(ip_addr)
+    
     #open_ports_amount = len(http_scan)
-    for i in range(len(http_scan)):
-        print("Open HTTP ports are: {}".format(http_scan[i]))
-        
+    # Looping through by the number of open ports
+    for port in range(len(open_http_ports)):
+        print("Open HTTP ports are: {}".format(open_http_ports[port]))
+        return_status = cgi_enum(ip_addr, open_http_ports[port])
+        print("Status code: {}".format(return_status))
+        '''
+        This will traverse through the list elements which are the port numbers
+        The port numbers serve as parameters for the next function which is to detect cgi-bin
+        http:// <- startswith (IP address):(port) <- append a /cgi-bin <- if this returns 403 or 200 then we're good to go with the crawling
+        else if the program gives 404, just dip.
+        cgi_bin_detector(ip_addr, open_http_ports[port])
+        '''
+        # Testing to see if it works with a function
+        #ports.TCPportCheck(ip_addr, http_scan[port])
+
         # Testing to see if the list elements in http_scan can be treated as ports
         #ports.TCPportCheck(ip_addr, http_scan[i])
 
-    print("Target IP address: {}".format(ip_addr))
     #print("Function return: {}\nFunction data type: {}".format(http_scan, type(http_scan)))
 
     '''
