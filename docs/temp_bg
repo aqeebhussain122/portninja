@@ -2,3 +2,8 @@ All the error handling happens in the scan_http function
 List extraction is done in main()
 
 function cgi_enum has the dual purpose to: find cgi_bin and apply a chosen wordlist
+
+Get the HTTP status code:
+  We are using HEAD instead of GET to get the HTTP status code as HEAD is lighter/stealthy as it just checks that the page is there.
+
+sys_exits or not??
