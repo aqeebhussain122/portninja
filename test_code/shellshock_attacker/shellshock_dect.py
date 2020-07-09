@@ -1,6 +1,7 @@
 import ports
 import sys
 import requests
+import cgi_crawler
 
 '''
 Make an HTTP request to the available ports and append /cgi-bin and get the return code of it
@@ -14,7 +15,7 @@ def get_status_code(ip_addr, port):
     cgi_url = extract_cgi_url(ip_addr, port)
     cgi_req = requests.get(cgi_url)
     cgi_req_status = cgi_req.status_code
-    if(cgi_req_status == 403):
+    if(cgi_req_status == 403 or cgi_req_status == 301 or cgi_req_status == 200):
         print("cgi-bin is here")
     elif(cgi_req_status == 404):
         print("cgi-bin is not on the server, you got 404\nexiting....")
@@ -46,6 +47,9 @@ def extract_cgi_url(ip_addr, port):
         pass
     
     return cgi_req_url
+
+def cgi_bin_crawler():
+    return
 
 '''
 Use an internal HTTP list of ports which will be scanned for being open/closed with 1 and 0
@@ -96,6 +100,7 @@ def main():
         target_status_code = get_status_code(ip_addr, port)
         print("HTTP GET Request status code: {}".format(target_status_code))
         target_port = open_http_ports[port]
-        print("The target port for CGI function is {}".format(target_port))
+        print("The target port for cgi-bin detection is {}".format(target_port))
+        print("--------------------------------\nStarting web crawler")
 
 main()
