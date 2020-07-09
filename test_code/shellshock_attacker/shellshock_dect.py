@@ -6,7 +6,11 @@ import requests
 Make an HTTP request to the available ports and append /cgi-bin and get the return code of it
 '''
 def cgi_enum(ip_addr, port):
+    '''
+    Booleans used for future use
+    '''
     cgi_bin_exists = False
+    https = True
     '''
     1. Make an HTTP request to the given ip and port
     2. IP & port need to be variable
@@ -15,23 +19,40 @@ def cgi_enum(ip_addr, port):
     # That is the url with ip address as variable
 
     # If port not 443 then don't use an HTTPS query
+    '''
     if port != 443:
         # Do an HTTP query if not 443
+        https = False
         cgi_req = requests.get('http://{}:{}/cgi-bin'.format(ip_addr,port))
     else:
         cgi_req = requests.get('https://{}:{}/cgi-bin'.format(ip_addr,port))
+    '''
+    if port != 443:
+        cgi_req = requests.Request('GET', 'http://{}:{}/cgi-bin'.format(ip_addr,port))
+        prep = cgi_req.prepare()
+        cgi_url = prep.url
+    else:
+        cgi_req = requests.Request('GET', 'https://{}:{}/cgi-bin'.format(ip_addr, port)) 
+        prep = cgi_req.prepare()
+        cgi_url = prep.url
 
-    req_status_code = cgi_req.status_code
+    '''
+    #print("Request headers: \n\n {}".format(cgi_req.headers))
+    #req_status_code = cgi_req.status_code
+    '''
+
+    '''
     if req_status_code == 403 or req_status_code == 200 or req_status_code == 301:
         cgi_bin_exists = True
-        print("CGI-BIN potentially exists")
+        print("CGI-BIN status: {}".format(cgi_bin_exists))
     elif(req_status_code == 404):
         print("CGI-BIN not found")
         pass
     else:
         pass
+    '''
     #print("Target server with CGI-BIN status is: {}".format(cgi_req))
-    return req_status_code
+    return cgi_url
 
 '''
 Use an internal HTTP list of ports which will be scanned for being open/closed with 1 and 0
@@ -153,8 +174,8 @@ def main():
     # Looping through by the number of open ports
     for port in range(len(open_http_ports)):
         print("Open HTTP ports are: {}".format(open_http_ports[port]))
-        return_status = cgi_enum(ip_addr, open_http_ports[port])
-        print("Status code: {}".format(return_status))
+        target_url = cgi_enum(ip_addr, open_http_ports[port])
+        print("Target URL: {}".format(target_url))
         '''
         This will traverse through the list elements which are the port numbers
         The port numbers serve as parameters for the next function which is to detect cgi-bin
