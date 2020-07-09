@@ -1,4 +1,16 @@
 All the error handling happens in the scan_http function
 List extraction is done in main()
 
-function cgi_enum has the dual purpose to: find cgi_bin and apply a chosen wordlist
+function extract_cgi_url 
+
+HTTP status code is collected using GET not HEAD
+
+-----------------------------
+sys.exits:
+  Current sys.exits = 2
+    system.exit if no ports are open.
+    if cgi_bin is = 404, sys.exit
+    
+  Future sys.exits:
+    if no cgi_bin files in cgi_bin dir, sys.exit
+ -----------------------------
