@@ -82,8 +82,17 @@ def scan_http(ip_addr):
 
     return http_open_ports
 
-def cgi_crawler_bin():
-    return
+'''
+IP address and port as input parameters
+'''
+def cgi_bin_crawler(ip_addr, port):
+    '''
+    URL is extracted from the function which is then given to the checkPath function
+    '''
+    cgi_url = extract_cgi_url(ip_addr, port)
+    print("CheckPath function output: {}".format(cgi_crawler.checkPath(cgi_url)))
+
+    return cgi_url
 
 def main():
     ip_addr = sys.argv[1]
@@ -102,5 +111,7 @@ def main():
         target_port = open_http_ports[port]
         print("The target port for cgi-bin detection is {}".format(target_port))
         print("--------------------------------\nStarting web crawler")
+        web_crawler_url = cgi_bin_crawler(ip_addr, target_port)
+        print("Web crawler URL: {}".format(web_crawler_url))
 
 main()
