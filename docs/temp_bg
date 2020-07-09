@@ -1,1 +1,4 @@
+All the error handling happens in the scan_http function
+List extraction is done in main()
 
+cgi_bin_detector and word_list_application are done in the same function.
