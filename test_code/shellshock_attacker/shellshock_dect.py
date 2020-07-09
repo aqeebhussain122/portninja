@@ -5,44 +5,46 @@ import requests
 '''
 Make an HTTP request to the available ports and append /cgi-bin and get the return code of it
 '''
-def cgi_enum(ip_addr, port):
+
+'''
+We need to get the status code based on the url and then if the code is 403 then proceed else if it's 404 then exit
+Return the cgi request status code to main
+'''
+def get_status_code(ip_addr, port):
+    cgi_url = extract_cgi_url(ip_addr, port)
+    cgi_req = requests.get(cgi_url)
+    cgi_req_status = cgi_req.status_code
+    if(cgi_req_status == 403):
+        print("cgi-bin is here")
+    elif(cgi_req_status == 404):
+        print("cgi-bin is not on the server, you got 404\nexiting....")
+        sys.exit(1)
+    else:
+        pass
+
+    return cgi_req_status
+
+'''
+Extract the target's URL from the HTTP GET request and return it to main
+'''
+def extract_cgi_url(ip_addr, port):
     '''
     Booleans used for future use
     '''
     cgi_bin_exists = False
     https = True
     
-    print("The target port for CGI function is {}".format(port))
-
-    
-    # If port not 443 then don't use an HTTPS query
     if port != 443:
-        # Repository uses different modules so two calls are made to get the status code
-
-        # This variable extracts the URL in a GET request
         cgi_req_url_extract = requests.Request('GET', 'http://{}:{}/cgi-bin'.format(ip_addr,port))
-        # This variable is the actual get request which is actually sent off
-        cgi_req = requests.request('GET', 'http://{}:{}/cgi-bin'.format(ip_addr,port))
-        cgi_req_status = cgi_req.status_code
-        print("Status code: {} ".format(cgi_req))
         prep = cgi_req_url_extract.prepare()
         cgi_req_url = prep.url
-        
-        '''
-        cgi_req_get = requests.get('http://{}:{}/cgi-bin'.format(ip_addr, port))
-        cgi_req_response = cgi_req_get.status_code
-        print(cgi_req_response)
-        '''
-        # That is the url with ip address as variable
-        #print(cgi_req)
-        #prep = cgi_req_url_extract.prepare()
-        #cgi_req_url = prep.url
-    '''
-    else:
-        cgi_req = requests.Request('GET', 'https://{}:{}/cgi-bin'.format(ip_addr, port)) 
+    elif port == 443:
+        cgi_req = requests.Request('GET', 'https://{}:{}/cgi-bin'.format(ip_addr, port))
         prep = cgi_req.prepare()
         cgi_url = prep.url
-    '''
+    else:
+        pass
+    
     return cgi_req_url
 
 '''
@@ -89,7 +91,11 @@ def main():
     # Looping through by the number of open ports
     for port in range(len(open_http_ports)):
         print("Open HTTP ports are: {}".format(open_http_ports[port]))
-        target_url = cgi_enum(ip_addr, open_http_ports[port])
+        target_url = extract_cgi_url(ip_addr, open_http_ports[port])
         print("Target URL: {}".format(target_url))
+        target_status_code = get_status_code(ip_addr, port)
+        print("HTTP GET Request status code: {}".format(target_status_code))
+        target_port = open_http_ports[port]
+        print("The target port for CGI function is {}".format(target_port))
 
 main()
