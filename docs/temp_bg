@@ -15,3 +15,5 @@ sys.exits:
   Future sys.exits:
     if no cgi_bin files in cgi_bin dir, sys.exit
  -----------------------------
+ Tomorrow plan:
+ Build and implement cgi_bin_crawler
