@@ -1,4 +1,4 @@
 All the error handling happens in the scan_http function
 List extraction is done in main()
 
-function cgi_enum has the dual purpose: find cgi_bin and apply chosen wordlist
+function cgi_enum has the dual purpose to: find cgi_bin and apply a chosen wordlist
