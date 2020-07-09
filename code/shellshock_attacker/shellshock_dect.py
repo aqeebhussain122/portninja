@@ -14,17 +14,32 @@ def cgi_enum(ip_addr, port):
     
     print("The target port for CGI function is {}".format(port))
 
+    
     # If port not 443 then don't use an HTTPS query
     if port != 443:
-        cgi_req = requests.Request('GET', 'http://{}:{}/cgi-bin'.format(ip_addr,port))
-        prep = cgi_req.prepare()
-        cgi_url = prep.url
+        # Repository uses different modules so two calls are made to get the status code
+        cgi_req_url_extract = requests.Request('GET', 'http://{}:{}/cgi-bin'.format(ip_addr,port))
+        cgi_req = requests.request('GET', 'http://{}:{}/cgi-bin'.format(ip_addr,port))
+        print("Status code: {} ".format(cgi_req.status_code))
+        prep = cgi_req_url_extract.prepare()
+        cgi_req_url = prep.url
+        
+        '''
+        cgi_req_get = requests.get('http://{}:{}/cgi-bin'.format(ip_addr, port))
+        cgi_req_response = cgi_req_get.status_code
+        print(cgi_req_response)
+        '''
+        # That is the url with ip address as variable
+        #print(cgi_req)
+        #prep = cgi_req_url_extract.prepare()
+        #cgi_req_url = prep.url
+    '''
     else:
         cgi_req = requests.Request('GET', 'https://{}:{}/cgi-bin'.format(ip_addr, port)) 
         prep = cgi_req.prepare()
         cgi_url = prep.url
-
-    return cgi_url
+    '''
+    return cgi_req_url
 
 '''
 Use an internal HTTP list of ports which will be scanned for being open/closed with 1 and 0
