@@ -89,6 +89,8 @@ def scan_http(ip_addr):
 '''
 Checks the wordlist and whichever words return 200, this function will return it
 '''
+
+'''
 def check_wordlist(ip_addr, port, word):
     base_url = extract_cgi_url(ip_addr, port)
     word_response = requests.get(base_url + '/' + word).status_code
@@ -107,7 +109,7 @@ def check_wordlist(ip_addr, port, word):
         #print("Nothing found")
         #sys.exit(1)
     return word_response
-
+'''
 
 
 def execute_wordlist(ip_addr, port, wordlist):
@@ -181,6 +183,14 @@ def usage():
         print("Arguments: <Target IP address> <wordlist>")
         sys.exit(1)
 
+'''
+    1. Craft the target URL with the found word using extract_cgi_url
+    2. 
+    3. 
+'''
+def shellshock_attack():
+    return
+
 def main():
     usage()
     ip_addr = sys.argv[1]
@@ -203,5 +213,7 @@ def main():
         print("Web crawler URL: {}".format(target_base_url))
         found_target_cgi_urls = execute_wordlist(ip_addr, port, wordlist)
         found_target_cgi_urls_str = convert_list_to_string(found_target_cgi_urls, '\n')
-        print("Execute wordlist URL: {}".format(found_target_cgi_urls_str))
+        #print("Execute wordlist URL: {}".format(found_target_cgi_urls_str))
+
+    print("cgi-bin links to attack: {}".format(found_target_cgi_urls_str))
 main()
