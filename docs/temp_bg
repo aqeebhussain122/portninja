@@ -35,27 +35,44 @@ listen on our machine.
 
 
 Extra:
-bin/py is alias for our payload
+binpy is alias for our payload
 -------------------------------------
 Step 1:
-1st craft a HEAD request to the target cgi-bin page,
-then modify the user agent with a malicious function of shellshock to get command execution for payload.
-inject payload via our command execution
+1st craft a HEAD request to the target page hosted on the cgi-bin directory. We get this url via the shellshock_dect tool,
+
+then modify the user agent with a malicious function of shellshock to get command execution for delivery of payload.
+--- We will need to use Python requests in order to send a custom HTTP header which contains the payloads ---
+
+inject payload via our command execution which requires our vulnerable URL
+--- Payload attaches to the result URL from the shellshock_dect program ---
+
 append host with target HTTP host to finish the HTTP head request
+--- We need to complete the HTTP request and try to attach the host using bytes (Had issues with this before) ---
+
 then, get the output and give it to a network socket
+--- (Socket data delivery needs review) ---
+
 upon which the target resides (ip and port)
+
 
 -------------------------------------
 Step 2:
 payload comes back to us (as its a reverse shell)
 	must have full pty capabilites.
 	
-	
-
+We can write the main payload (rev shell) in C or Python and it will require a client on the target side which will need to be executed via payload delivery and this will connect back to the reverse shell which we have written. This will get rid of the "crutches" of having to rely on pre-made payloads 
 
 NEW STTTTTTTTTTTTTTTTTTTTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEPS:
 step1:
-target has shellshock vuln so we have command execution. attacker has payload hosted on python http server. wget payload from target via shellshock.--
+target has shellshock vuln so we have command execution. attacker has payload hosted on python http server. wget payload from target via shellshock.
 step2:
-download payload onto /tmp or /dev/shm
-then netcat call on the target machine to envoke our payload and send it back to the attacker box.
+download payload onto /tmp or /dev/shm via HTTP server web delivery (If there are options, we can consider them too)
+then plant our client script which connects back to the reverse shell on the target machine to invoke our payload and send it back to the attacker box.
+
+Netcat call is one thing which we can consider but then we won't need the reverse shell payload to be sent back which we are writing. That's because this is how all of this will come together. 
+
+1st step: We craft the HEAD request and this is what will contain common payloads such as python, perl, nc and bash.
+
+When we craft this HEAD request we use pre-made payloads from the things listed (Python, etc.) in order to get a shell. We have to use a network listener using netcat. This is the stage where we simply focus on getting the HTTP requests in place with existing tools for a reverse shell. 
+
+2nd step: (This will come after we've got the HTTP requests in place and will require testing between two machines since it's a reverse shell payload
