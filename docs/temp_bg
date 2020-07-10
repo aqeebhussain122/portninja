@@ -15,5 +15,17 @@ sys.exits:
   Future sys.exits:
     if no cgi_bin files in cgi_bin dir, sys.exit
  -----------------------------
- Tomorrow plan:
- Build and implement cgi_bin_crawler
+
+
+
+Step 1:
+1st craft a HEAD request to the target cgi-bin page,
+then modify the user agent with a malicious function of shellshock to get command execution for payload.
+inject payload via our command execution
+append host with target HTTP host to finish the HTTP head request
+then, get the output and give it to a network socket
+upon which the target resides (ip and port)
+
+-------------------------------------
+Step 2:
+
