@@ -49,3 +49,13 @@ upon which the target resides (ip and port)
 Step 2:
 payload comes back to us (as its a reverse shell)
 	must have full pty capabilites.
+	
+	
+
+
+NEW STTTTTTTTTTTTTTTTTTTTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEPS:
+step1:
+target has shellshock vuln so we have command execution. attacker has payload hosted on python http server. wget payload from target via shellshock.--
+step2:
+download payload onto /tmp or /dev/shm
+then netcat call on the target machine to envoke our payload and send it back to the attacker box.
