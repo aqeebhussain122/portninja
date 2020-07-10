@@ -15,9 +15,19 @@ sys.exits:
   Future sys.exits:
     if no cgi_bin files in cgi_bin dir, sys.exit
  -----------------------------
+DAY 2:
 
+Goal:
+Get netcat (ip and port) to go straight to bin/py 
+our side: open bind shell so the target can connect to us
 
+Process:
+/bin/py waits for connections
+attacker sends connection to /bin/py 
 
+Extra:
+bin/py is alias for our payload
+-------------------------------------
 Step 1:
 1st craft a HEAD request to the target cgi-bin page,
 then modify the user agent with a malicious function of shellshock to get command execution for payload.
