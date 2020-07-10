@@ -28,4 +28,5 @@ upon which the target resides (ip and port)
 
 -------------------------------------
 Step 2:
-
+payload comes back to us (as its a reverse shell)
+	must have full pty capabilites.
