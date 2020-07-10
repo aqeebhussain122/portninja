@@ -18,12 +18,21 @@ sys.exits:
 DAY 2:
 
 Goal:
+try 1:
 Get netcat (ip and port) to go straight to bin/py 
 our side: open bind shell so the target can connect to us
+try 2:
+install python reverse shell as a binary. (no need for python on the target box)
+
 
 Process:
+try 1:
 /bin/py waits for connections
 attacker sends connection to /bin/py 
+try 2:
+execute file on their machine
+listen on our machine.
+
 
 Extra:
 bin/py is alias for our payload
