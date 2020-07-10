@@ -6,6 +6,11 @@ import requests
 Make an HTTP request to the available ports and append /cgi-bin and get the return code of it
 '''
 
+
+def convert_list_to_string(input_list, sep):
+    final_string = sep.join(input_list)
+    return final_string
+
 '''
 We need to get the status code based on the url and then if the code is 403 then proceed else if it's 404 then exit
 Return the cgi request status code to main
@@ -106,6 +111,7 @@ def check_wordlist(ip_addr, port, word):
 
 
 def execute_wordlist(ip_addr, port, wordlist):
+    found_urls = []
     '''
     1. Open the file
     2. Read the file and check how many lines to check
@@ -118,15 +124,39 @@ def execute_wordlist(ip_addr, port, wordlist):
     with open(wordlist) as file:
         # This reads the file
         words_to_check = file.read().strip().split('\n')
+        ''' The file has been read and can then be processed in a for loop '''
+
+    ''' This is the total number of words contained in the file '''
     print("Total words to check: {}".format(len(words_to_check)))
+
     for words in range(len(words_to_check)):
-        word_response = requests.get(base_url + '/' + words_to_check[words])
+        ''' All of these get requests are directed to our target '''
+        ''' This commented variable doesn't extract the status code so we can't work with the status code ffs ''' 
+        #word_response = requests.get(base_url + '/' + words_to_check[words])
+        word_response = requests.get(base_url + '/' + words_to_check[words]).status_code
         word_url_extract = requests.Request('GET', '{}/{}'.format(base_url,words_to_check[words]))
         prep = word_url_extract.prepare()
         word_url = prep.url
-        print(word_url)
-        print(word_response)
         '''
+        Just prints the entire wordlist, then you can't see the found output properly
+        print(word_url)
+        '''
+        if(word_response == 200):
+            print("cgi-bin target(s) detected: {}".format(word_url))
+            found_urls.append(word_url)
+
+
+    ''' Return the found URLs to main '''
+    return found_urls
+
+    '''
+    If statement outside of the for loop does not work, so don't even bother with this.
+    if(word_response == 200):
+        print("Found: {}".format(word_url))
+        found_urls.append(word_url)
+        print(found_urls)
+    '''
+    '''
         This test just didn't even work...
         if(word_response == 200):
             print("Found: {}".format(word_url))
@@ -145,7 +175,6 @@ def execute_wordlist(ip_addr, port, wordlist):
         #check_words = check_wordlist(ip_addr, port, words_to_check[word])
         #print(check_words)
         #print(word_url)
-    return word_response
 
 
 def main():
@@ -167,10 +196,7 @@ def main():
         print("The target port for cgi-bin detection is {}".format(target_port))
         print("--------------------------------\nStarting web crawler")
         print("Web crawler URL: {}".format(target_base_url))
-        #target_wordlist_response_code = check_wordlist(ip_addr, port, wordlist)
-        #target_wordlist_response_code = check_wordlist(ip_addr, port, wordlist)
-        #target_wordlist_response_code = check_wordlist(ip_addr, port, 'statu')
-        #print("Wordlist checker response code: {}".format(target_wordlist_response_code))
-        
-        print("Execute wordlist URL: {}".format(execute_wordlist(ip_addr, port, wordlist)))
+        found_target_cgi_urls = execute_wordlist(ip_addr, port, wordlist)
+        found_target_cgi_urls_str = convert_list_to_string(found_target_cgi_urls, '\n')
+        print("Execute wordlist URL: {}".format(found_target_cgi_urls_str))
 main()
