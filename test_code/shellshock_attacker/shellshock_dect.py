@@ -184,12 +184,16 @@ def usage():
         sys.exit(1)
 
 '''
-    1. Craft the target URL with the found word using extract_cgi_url
-    2. 
+    1. Insert the target URL as a function param
+    2. Create a variety of payloads which is a case of trial/error
+            List? - Conversion issues
+            Dictionary - Key mappings 1 - nc 2 - python 3 - perl <- args 
+            Loop through each payload to see which one responds to the listener
+            if a payload successfully connects then don't continue
     3. 
 '''
-def shellshock_attack():
-    return
+
+''' Wraps the found url to then allow shellshock to be performed against it '''
 
 def main():
     usage()
