@@ -75,20 +75,14 @@ Checks the wordlist and whichever words return 200, this function will return it
 def check_wordlist(ip_addr, port, word):
     base_url = extract_cgi_url(ip_addr, port)
     word_response = requests.get(base_url + '/' + word).status_code
-    #word_url = requests.get(base_url + '/' + word)
     # Executes the wordlist 
     word_url_extract = requests.Request('GET', '{}/{}'.format(base_url, word))
     prep = word_url_extract.prepare()
     word_url = prep.url
-    #print("CheckPath function output: {}".format(cgi_crawler.checkPath(cgi_target_url)))
-    #print(word_url_extract)
-    #print(word_url)
     if(word_response == 200):
         print("cgi-bin target: {}".format(word_url))
     else:
         pass
-        #print("Nothing found")
-        #sys.exit(1)
     return word_response
 
 
