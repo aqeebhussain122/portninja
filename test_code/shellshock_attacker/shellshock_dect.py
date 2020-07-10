@@ -176,8 +176,13 @@ def execute_wordlist(ip_addr, port, wordlist):
         #print(check_words)
         #print(word_url)
 
+def usage():
+    if len(sys.argv) < 3:
+        print("Arguments: <Target IP address> <wordlist>")
+        sys.exit(1)
 
 def main():
+    usage()
     ip_addr = sys.argv[1]
     wordlist = sys.argv[2]
     print("Target IP address: {}".format(ip_addr))
