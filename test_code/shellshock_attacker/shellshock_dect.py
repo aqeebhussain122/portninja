@@ -24,8 +24,8 @@ def get_status_code(ip_addr, port):
     elif(cgi_req_status == 404):
         print("cgi-bin is not on the server, you got 404\nexiting....")
         # Removal of sys.exit(1) which should allow the use of more than one port being checked for shellshock 
-        print("Moving onto next port")
-        #sys.exit(1)
+        #print("Moving onto next port")
+        sys.exit(1)
     else:
         pass
 
