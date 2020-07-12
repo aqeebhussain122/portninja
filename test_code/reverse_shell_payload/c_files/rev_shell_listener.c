@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 		sizeof(serv_addr)) < 0)
 		error("ERROR on binding");
 	// Number of connections the socket can listen for
-	listen(sockfd, 5);
+	listen(sockfd, 1);
 	// Gets the size of the client address
 	clilen = sizeof(cli_addr);
 	// Opens a new file descriptor on order for the client to come in and connect. This remains blocked until the client connects in which the process wakes up. New fd is returned, second argument is a reference pointer to address of client on other side and third is size of structure.

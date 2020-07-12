@@ -8,6 +8,7 @@ def listen_sock(port):
     try:
         s.bind(('0.0.0.0', port))
     except socket.error as msg:
+        print(msg)
         print("Bind failed. Pagan...")
         sys.exit()
     print("Binding is done")
@@ -25,6 +26,7 @@ def listen_sock(port):
     return addr
 
 def main():
-    listen_sock(3333)
+    port = int(sys.argv[1])
+    listen_sock(port)
 
 main()
