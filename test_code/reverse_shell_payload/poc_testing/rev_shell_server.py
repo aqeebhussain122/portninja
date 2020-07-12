@@ -8,9 +8,7 @@ def listen_sock(port):
     try:
         s.bind(('0.0.0.0', port))
     except socket.error as msg:
-        print(msg)
-        print("Bind failed. Pagan...")
-        sys.exit()
+        sys.exit("Error: {}\nBind failed. Pagan...".format(msg))
     print("Binding is done")
     
     listen_conns = s.listen(3)

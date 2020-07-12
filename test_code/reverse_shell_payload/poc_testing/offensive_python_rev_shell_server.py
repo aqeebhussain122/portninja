@@ -29,12 +29,12 @@ def connect(port):
 
     while True:
         #command = raw_input("$ ") # Get user input and store it in command variable
-        command = input ("$ ") # Get user input and store it in command variable
+        command = raw_input("$ ") # Get user input and store it in command variable
         quit_command = 'terminate'
 
         #if 'terminate' in command: # If we got terminate command, inform the client and close the connect and break the loop
         if quit_command in command: # If we got terminate command, inform the client and close the connect and break the loop
-            conn.send(quit_command_encoded)
+            conn.send(quit_command)
             conn.close()
             break
 
@@ -46,5 +46,4 @@ def connect(port):
 def main ():
     port = int(sys.argv[1])
     connect(port)
-    connect.close()
 main()
