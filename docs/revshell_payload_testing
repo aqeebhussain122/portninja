@@ -1,1 +1,20 @@
+Step 1:
+  Create a network socket.
 
+
+
+Function to print errors from processers
+'buffer' = amount of characters read from the socket
+
+We create the server and client address using a struct known as sockaddr_in
+
+'htons' - thin layer between the code and how its interpreted in memory (network byte order)
+
+file descriptors as we are essential accessing.
+
+
+memset is libary to initilize memory from a start point to an endpoint for the data to populated
+bzero adds 0's into sections of memory
+
+Extra:
+"A socket is an abstraction of a communication endpoint"
