@@ -9,19 +9,20 @@ def listen_sock(port):
         s.bind(('0.0.0.0', port))
     except socket.error as msg:
         sys.exit("Error: {}\nBind failed. Pagan...".format(msg))
-    print("Binding is done")
     
-    listen_conns = s.listen(3)
+    print("Binding is done")
+    listen_conns = s.listen(1)
     print("Listening connections: {}".format(listen_conns))
-    print('Socket is listening...')
+    print('Socket is listening... on port {}'.format(port))
     # Wait infinitely
     while 1:
         conn, addr = s.accept()
-        print("Connected")
+        print("Connected: {}".format(addr))
+        ''' No command handler available on the listener '''
 
-    s.close()
+    #s.close()
 
-    return addr
+    return cmd
 
 def main():
     port = int(sys.argv[1])
