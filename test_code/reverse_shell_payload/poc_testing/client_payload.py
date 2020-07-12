@@ -21,7 +21,7 @@ def socket_connect(ip, port):
 #connection.connect(("192.168.1.6", 2222))
 #connection.send(b'\n[+] Got your connection.\n')
     connection.connect((ip, port))
-    connection.send(b'connected\r\n')
+    connection.send(b'[+] connected\r\n')
 
     while True:
         recv_data  = connection.recv(1024)
@@ -31,8 +31,6 @@ def socket_connect(ip, port):
         if recv_data == 'quit':
             break
         print(recv_data)
-
-    connection.close()
 
 def main():
     ip = sys.argv[1]
