@@ -1,29 +1,44 @@
-Step 1:
-  Create a network socket.
+New:
+Create a reliable network program to send data between a network sender and listener (reverse shell)
 
-
-
+Create a network Socket
+  •
+  •
+  •
+Create our own Shell
+  •
+  •
+  •
+Create a client Payload
+  •
+  •
+  •
+Create a python server to which the target connects to via command injection
+  •
+  •
+  •
+============================================================================================================================
+Old:
+  
+Create a network socket.
+---------
 Function to print errors from processers
 'buffer' = amount of characters read from the socket
-
+---------
 We create the server and client address using a struct known as sockaddr_in
-
+---------
 'htons' - thin layer between the code and how its interpreted in memory (network byte order)
   how the binary and the machine interprets the port number.
   converts a port number in host byte order to a port number in network byte order.
-  
-  
-
-
-
+---------
 memset is libary to initilize memory from a start point to an endpoint for the data to populated
 bzero adds 0's into sections of memory
   First zero out an entire memory space from point a to b. Then we initialize our own variables into it.
-  
-
+---------
 Next stage:
 Make our own reliable network program to send data between a network sender and listener. reverse shell
-
+---------
 Extra:
 "A socket is an abstraction of a communication endpoint"
 file descriptors as we are essential accessing a file.
+============================================================================================================================
