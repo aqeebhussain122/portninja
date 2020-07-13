@@ -1,4 +1,4 @@
-To do; change the usage function to add a condition of filtering the number of args being more than what’s required.
+To do; change the usage function to add a condition of filtering the number of args being more than what’s required. - 13/07/2020 19:56PM
 ----------------------------------------------------------------------------------------------------------------
 Other:
   All the error handling happens in the scan_http function
