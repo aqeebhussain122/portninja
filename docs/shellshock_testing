@@ -1,4 +1,14 @@
 To do; change the usage function to add a condition of filtering the number of args being more than what’s required. - 13/07/2020 19:56PM
+
+Pseudo Code:
+def usage():
+    if len(sys.argv) < 3:
+        print("Arguments: <Target IP address> <wordlist>")
+        sys.exit(1)
+  
+   elif len(sys.argv) > 3:
+          print("Error, too many Arguments")
+          sys.exit(1)
 ----------------------------------------------------------------------------------------------------------------
 Other:
   All the error handling happens in the scan_http function
