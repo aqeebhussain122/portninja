@@ -19,8 +19,8 @@ def handle_sock(port):
     conn, addr = s.accept()
     print("Connected to target: {}".format(addr[0]))
     #test = "Get this??".encode()
-    test = "test".encode()
-    conn.send(test)
+    #test = "test".encode()
+    #conn.send(test)
     while True:
         # This opens the socket up for taking in connections
         # conn is the actual socket, addr is used for addressing purposes

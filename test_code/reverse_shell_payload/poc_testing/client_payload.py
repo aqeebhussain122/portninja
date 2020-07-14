@@ -9,8 +9,9 @@ def client_sock(ip_addr, port):
    # connect to the server
     s.connect((ip_addr, port))
     # receive the greeting message
-    message = s.recv(1024).decode()
-    print("Server:", message)
+    # Bug
+    # message = s.recv(1024).decode()
+    # print("Server:", message)
 
     while True:
         # receive the command from the server
