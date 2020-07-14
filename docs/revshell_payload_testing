@@ -26,7 +26,7 @@ Client-Sever:
     Our case: We create a server in which we handle sockets, create, bind, accept sockets then we send/receive commands back & forth to our target via reverse shell mechanism.
     
     
-  • Currently building both the client functionality & the python sever
+  • Currently building both the client functionality & the python sever - (Reference & base code) -  https://www.thepythoncode.com/code/create-reverse-shell-python
   • 
   •
    
