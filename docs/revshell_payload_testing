@@ -27,8 +27,8 @@ Client-Sever:
     
     
   • Currently building both the client functionality & the python sever - (Reference & base code) -  https://www.thepythoncode.com/code/create-reverse-shell-python
-  • 
-  •
+  • Most of the PoC done, once error handling is complete.
+  • Subprocess work to do.
    
 ============================================================================================================================
 Old:
