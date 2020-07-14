@@ -24,10 +24,10 @@ Client-Sever:
   Description:
     Attacker: Netcat connection (Socket open on port) <- That socket then catches a known payload such as Python, perl or whatever to open bin/sh or bin/bash
     Our case: We create a server in which we handle sockets, create, bind, accept sockets then we send/receive commands back & forth to our target via reverse shell mechanism.
-    But even then, this "reverse payload" is our own. Not a pre-made shell.
     
-  •
-  •
+    
+  • Currently building both the client functionality & the python sever
+  • 
   •
    
 ============================================================================================================================
