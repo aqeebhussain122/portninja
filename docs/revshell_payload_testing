@@ -1,11 +1,11 @@
 New:
 Create a reliable network program to send data between a network sender and listener (reverse shell)
 
-Create a network Socket
+Create a network Socket 
   •
   •
   •
-Create our own Shell
+Create our own Shell (C programming job and will serve as part of the payload being sent over the wire)
   •
   •
   •
@@ -13,10 +13,12 @@ Create a client Payload
   •
   •
   •
-Create a python server to which the target connects to via command injection
-  •
-  •
-  •
+Create a python server to which the target connects to via command injection (Command & Control) 
+  • create() - Create the socket
+  • bind() - Bind the socket to a port 
+  • accept() - Accept a connection which comes in and create a blocking state
+  • send_commands() - Send commands to the recieved payload with encoding
+  • receive_commands() - Print and receive the appropriate decoded output for us to interact with the target. 
 ============================================================================================================================
 Old:
   
