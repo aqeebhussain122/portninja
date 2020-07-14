@@ -19,6 +19,17 @@ Create a python server to which the target connects to via command injection (Co
   • accept() - Accept a connection which comes in and create a blocking state
   • send_commands() - Send commands to the recieved payload with encoding
   • receive_commands() - Print and receive the appropriate decoded output for us to interact with the target. 
+  
+Client-Sever:
+  Description:
+    Attacker: Netcat connection (Socket open on port) <- That socket then catches a known payload such as Python, perl or whatever to open bin/sh or bin/bash
+    Our case: We create a server in which we handle sockets, create, bind, accept sockets then we send/receive commands back & forth to our target via reverse shell mechanism.
+    But even then, this "reverse payload" is our own. Not a pre-made shell.
+    
+  •
+  •
+  •
+   
 ============================================================================================================================
 Old:
   
