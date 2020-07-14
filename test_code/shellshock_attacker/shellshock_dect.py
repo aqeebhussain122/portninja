@@ -181,7 +181,7 @@ def execute_wordlist(ip_addr, port, wordlist):
         #print(word_url)
 
 def usage():
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 3 or len(sys.argv) > 3:
         print("Arguments: <Target IP address> <wordlist>")
         sys.exit(1)
 
