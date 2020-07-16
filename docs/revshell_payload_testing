@@ -1,3 +1,20 @@
+Layout: An attacker uses command execution from the target box to execute the client payload. 
+
+The client payload connect to a malicious server on port x.
+
+The attacking server listens on port x for the clients connection, once recieved the connection is bound and occupies port x. 
+
+The attacking server establishes and maintains that connection by creating a socket, binding to a port and listening for a connection to come through. 
+
+Commands are transmit from server to client over the wire by encoded bytes. Once recieved on client-side, they are decoded to data-type string. 
+
+The client payload listens for the server commands and executes them in string format using a while loop with hardcoded commands and their functionality. It uses it's own subprocess to do so.
+
+
+
+
+TLDR: Sever & Client maintain a connection, server sends requests, client executes requests with hardcoded functionality within its local payload.
+-------------------------------------------------------------------------------------------
 New:
 Create a reliable network program to send data between a network sender and listener (reverse shell)
 
