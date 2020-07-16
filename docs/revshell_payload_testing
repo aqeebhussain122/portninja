@@ -76,7 +76,7 @@ Shell encryption:
 
 - Future thing
 - use SIM (steal insult modify) 
-
+- 
 
 
 
@@ -94,7 +94,40 @@ Testing zone:
 
 
 
+=================================================================================================================================================================================
+2 steps:
+1) Find a shell we want (bash?)
 
+2) Developing our encryption:
+     what encryption standard are we using?
+	AES 256 bit encryption
+	build a encryptor and decryptor
+	incoperate into a network socot
+	RESEARCH BABY
+	
+	data over the wire should be fully encrypted, 
+	to decrypt use an obsucre number of keys? (nah vuln)
+ 	encryption doesn't get picked up on as most traffic on a valued target is encrypted
+	hide in plain sight (military style)
+	mask on a dns server??
+	
+	start off by building and viewing normal/simple encryption and decryption programs
+	encryporate it correctly so 3rd party can't view but we can.
+	build a PoC understand how encrypt and decrypt happens
+	then put it into our network program
+	
+Our network program should send encrypted data just like this rather than plain text. We don't want to leave any traces of ourselves:
+14:57:30.371656 IP (tos 0x0, ttl 64, id 41713, offset 0, flags [DF], proto TCP (6), length 128)
+    kali-linux-main.2222 > 192.168.0.104.49316: Flags [P.], cksum 0x8291 (incorrect -> 0x83a3), seq 32:108, ack 36, win 506, options [nop,nop,TS val 350060453 ecr 4294922070], length 76
+    0x0000:  000c 29a7 4598 000c 29dd 00df 0800 4500  ..).E...).....E.
+    0x0010:  0080 a2f1 4000 4006 1568 c0a8 0066 c0a8  ....@.@..h...f..
+    0x0020:  0068 08ae c0a4 f439 13ed 45b1 3a0d 8018  .h.....9..E.:...
+    0x0030:  01fa 8291 0000 0101 080a 14dd 7fa5 ffff  ................
+    0x0040:  4f56 1703 0300 47e4 d764 5e5c e038 fabc  OV....G..d^.8..
+    0x0050:  b06f 9d12 6c79 a7fe 9851 926e fa76 07c9  .o..ly...Q.n.v..
+    0x0060:  9950 9e81 4080 6501 636e 8e19 11c0 ec32  .P..@.e.cn.....2
+    0x0070:  0f4e 613c 110b 56ae febd f4aa ac24 f6c0  .Na<..V......$..
+    0x0080:  bfd2 0ecb 8fe9 3c45 c105 5ab0 461f       ......<E..Z.F.
 
 
 =================================================================================================================================================================================
