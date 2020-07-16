@@ -17,48 +17,68 @@ What else do we need to do:
 - testing
 =================================================================================================================================================================================
 
-Full PTY capabilites:
-(copp)
-commands, usage functionality, error handling, (google everything needed for a good pty shell), (figure out the inner workings of a fully functional PTY shell)
-- Our own Subprocess for executing commands
-- full pty capabilites 
-	client side:
-	commands, usage functionality, error handling, (google everything needed for a good pty shell), (figure out the inner workings of a fully functional PTY shell)
-	- Our own Subprocess for executing commands
+Full PTY capabilites (cop):
+• usage
+• commands and their functionality
+• error handling
+• subprocess
 
+GOAL: Understand the inner workings of a shell.
+========================================================
+Usage:
+
+- cntl+c to exit
+- cntrl+r to see previous commands?!?
+
+
+========================================================
+Commands + their functionality:
+
+lets use a template as we'll be building so many commands:
+Temp template pseudo code:
+
+  if command = ...
+     os.chdir(command[...])
+     execute
+     print results
+	
+========================================================
+Error handling:
+
+• timeout function()
+• try and catch statments.
+• print errors back to us?
+
+
+========================================================
 SubProcess Section:
--------------------
-their subprocess how it works:
-opens cmd
-shows input and output of bytes
-read and write
-some command error handling
-(basically how the cmd works. pre-built bash shell everyone uses.)
-
-
 
 So to create our own sub process we need to build our own package of commands.
-lets use a template as we'll be building so many commands:
-if command = ...
-	os.chdir(command[...])
-	execute
-	print results
+Pre-built bash shell everyone uses (naw)
 
-
-
-each time an command is input the program will scan over every if statement. This may be a better way to do it but idk:
-array_commands[cd, ls, ..., ...,]
-if argv1 = array_commands, value = True
-else exit()
-
-
-
-understand the inner workings of a shell:
 ...
 
+
+========================================================
+Extra:
+
+--------------------------
+Each time an command is input the client payload will scan over every hardcoded if statement. This may be a better way to do it but idk:
+
+array_commands[cd, ls, ..., ...,]
+if argv1 = array_commands SUCCESS
+else exit()
+
+----------------------------
+
 =================================================================================================================================================================================
-- shell encryption 
-(future ting, google a bit tho)
+Shell encryption: 
+
+- Future thing
+- use SIM (steal insult modify) 
+
+
+
 
 
 
@@ -67,27 +87,10 @@ understand the inner workings of a shell:
 
 
 =================================================================================================================================================================================
-Playzone:
-
-
-Aqeeb notes for the 2hr:
-we need to scope our path ahead properly in terms of what’s actually needed.
-	<done>
-take a step back and figure it out first
-	<done>
-We talk about it, draw it, pseudocode it.
-	<need to pseudocode>
-Can we understand what it is we’re trying to do?
-	<we are trying to create a beautiful custom shell which successfuly speaks from client-server) 
-We really need to understand the inner workings of an actual shell and how to incorporate a fully functional PTY shell.
-	<working on that>
-
-Shell development:
-	maybe use bash shell and personaly improve its functionality. 
-	<possibly but naw.>
-	we have errors in our shell which need to be fixed to make it fully pty compatible 
-	<Do some testing>
-
+Testing zone:
+...
+...
+...
 
 
 
