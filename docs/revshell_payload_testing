@@ -12,8 +12,8 @@ TLDR: Sever & Client maintain a connection, server sends requests, client execut
 =================================================================================================================================================================================
 What else do we need to do:
 
-- full pty capabilites 
-- shell encryption 
+- full pty capabilites - 
+- shell encryption -
 - testing
 =================================================================================================================================================================================
 
@@ -27,7 +27,7 @@ GOAL: Understand the inner workings of a shell.
 ========================================================
 Usage:
 
-- cntl+c to exit
+- cntl+c to exit 
 - cntrl+r to see previous commands?!?
 
 
@@ -45,7 +45,7 @@ Temp template pseudo code:
 ========================================================
 Error handling:
 
-• timeout function()
+• timeout function() - If the host is suddenly dead then just pull out OR AFK for a certain amount of time
 • try and catch statments.
 • print errors back to us?
 
