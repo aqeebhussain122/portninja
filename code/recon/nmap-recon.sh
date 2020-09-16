@@ -79,6 +79,6 @@ nmap_aggressive() {
 }
 
 
-#validate_ip $1
+validate_ip $1
 ping_ip $1
-#nmap_aggressive $1
+nmap_aggressive $1
