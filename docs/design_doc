@@ -34,4 +34,7 @@ Testing should be carried out on all platforms possible with a testing document 
 - Network host discovery scan to find alive hosts with randomised MAC/IP and lengthy sleep times  
 - Using legitimate addresses of those on the network.  
 - Attack all the hosts against each other
-- 
+
+
+Need to introduce the IPAddress python module into the code to allow clean IP address handling
+With the use of custom try/catch so it's clean of ValueError stuff

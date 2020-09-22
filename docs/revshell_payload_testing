@@ -109,7 +109,7 @@ Testing zone:
 	to decrypt use an obsucre number of keys? (nah vuln)
  	encryption doesn't get picked up on as most traffic on a valued target is encrypted
 	hide in plain sight (military style)
-	mask on a dns server??
+	mask on a dns server?? - potential idea to add-on
 	
 	start off by building and viewing normal/simple encryption and decryption programs
 	encryporate it correctly so 3rd party can't view but we can.
@@ -188,3 +188,5 @@ Extra:
 "A socket is an abstraction of a communication endpoint"
 file descriptors as we are essential accessing a file.
 ============================================================================================================================
+
+
