@@ -3,9 +3,9 @@ import socket
 import sys
 
 def portNumLimit(port):
-    num = int(port)
+    #num = int(port)
     MAX = 65535
-    if num < 1 or num > MAX:
+    if port < 1 or port > MAX:
         print(("Error: Ensure the specified port number is within the limit of: 1 - {}".format(MAX)))
         sys.exit(1)
     else:
