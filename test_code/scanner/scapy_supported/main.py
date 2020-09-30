@@ -27,6 +27,7 @@ def main():
         # Ports are currently not in list form which means the first port is scanned first
         parser.add_argument("-p", "--port_checks", help="Port switch  which will take a number of ports and scan them against destination ip", type=int, nargs='+')
         # Verbose level 1 (Regular scan of top 1,000 port_checks)
+        parser.add_argument("-s", "--syn", help="Port sweep through the network", action='store_true')
         parser.add_argument("-w", "--sweep", help="Port sweep through the network", action='store_true')
         args = parser.parse_args()
         port_checks.portNumLimit(args.source_port)
@@ -70,6 +71,10 @@ def main():
                         check_banner = port_checks.TCPbannerGrab(args.destination_ip, port)
                         time.sleep(2)
 
+        if args.syn:
+            for port in args.port_checks[0:]:
+                tcp_syn.send_syn(args.destination_ip, port)
+            print("This is for sending SYN packets to all ports")
 
         if args.forge:
            print("Forged IP address: %s" % (args.forge))

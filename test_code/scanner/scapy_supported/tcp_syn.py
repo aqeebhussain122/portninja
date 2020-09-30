@@ -12,7 +12,12 @@ def send_syn(target_ip, port):
     ''' Error happening because port is coming back with an ICMP error, this can be further profiled with an ACK scan '''
     # IP / ICMP 192.168.59.130 > 192.168.59.129 dest-unreach port-unreachable / IPerror / TCPerror
     ''' Put this in a try catch because function is only syn scan and should not be bothered by other things other than what a SYN scan entails '''
-    
+
+    if(resp_packet == None):
+        print('Nothing')
+    else:
+        pass
+
     if(resp_packet.haslayer(ICMP)):
         # Think of a better way to present this
         if(int(resp_packet.getlayer(ICMP).type)==3 and int(resp_packet.getlayer(ICMP).code) in [1,2,3,9,10,13]):
