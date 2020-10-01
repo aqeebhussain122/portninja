@@ -1,6 +1,6 @@
 from scapy.all import *
 
-def send_ack(ip, port, result = 1):
+def ack_scan(ip, port, result = 1):
     src_port = RandShort()
 
     try: 
@@ -16,13 +16,6 @@ def send_ack(ip, port, result = 1):
                 result = 0
             elif (int(resp.getlayer(ICMP).type)==3 and int(resp.getlayer(ICMP).code) in [1,2,3,9,10,13]):
                 result = 1
-
-        if result == 0:
-            print("Port {} is unfiltered".format(port))
-        elif result == 1:
-            print("Port {} is filtered".format(port))
-        else:
-            pass
     except Exception as e:
         pass
     return result
@@ -31,6 +24,12 @@ def main():
     target_ip = sys.argv[1]
     port = int(sys.argv[2])
     response = ack_scan(target_ip, port)
-
+    if response == 0:
+        print("Port {} is unfiltered".format(port))
+    elif response == 1:
+        print("Port {} is filtered".format(port))
+    else:
+        pass
+    print(response)
     return 0
-#main()
+main()
