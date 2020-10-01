@@ -27,7 +27,7 @@ def main():
         # Ports are currently not in list form which means the first port is scanned first
         parser.add_argument("-p", "--port_checks", help="Port switch  which will take a number of ports and scan them against destination ip", type=int, nargs='+')
         # Verbose level 1 (Regular scan of top 1,000 port_checks)
-        parser.add_argument("-s", "--syn", help="Port sweep through the network", action='store_true')
+        parser.add_argument("-s", "--syn", help="Sending SYN packets to each target port and then looking for the response being open/closed/filtered", action='store_true')
         parser.add_argument("-w", "--sweep", help="Port sweep through the network", action='store_true')
         args = parser.parse_args()
         port_checks.portNumLimit(args.source_port)
@@ -81,12 +81,6 @@ def main():
            tcp_header = craft.tcpCreate(args.forge, args.destination_ip, args.source_port, args.destination_port)
            packet = ip_header + tcp_header
            result = s.sendto(packet, (args.destination_ip, 0))
-           #check_success = port_checks.TCPportCheck(args.destination_ip, args.destination_port)
-           #check_banner = port_checks.TCPbannerGrab(args.destination_ip, args.destination_port)
-
-        #result = s.sendto(packet, (args.destination_ip, 0))
-        #port_status = port_checks.TCPportCheck(args.destination_ip, args.destination_port)
-        #port_banner = port_checks.TCPbannerGrab(args.destination_ip, args.destination_port)
 
 if __name__ == '__main__':
         main()
