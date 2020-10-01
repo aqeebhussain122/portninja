@@ -50,7 +50,7 @@ def main():
 
         # Checks for additional switches after the primary port check and banner grab
         if args.flood:
-                print("Flood option selected: Sending packets...")
+                print("Flood option selected: Performing SYN Flood...")
                 i = 0
                 value = int(args.flood)
                 while i < value:
@@ -77,10 +77,15 @@ def main():
 
         if args.forge:
            print("Forged IP address: %s" % (args.forge))
+
+           '''
+           This section is commented 
+
            ip_header = craft.ipCreate(args.forge, args.destination_ip)
            tcp_header = craft.tcpCreate(args.forge, args.destination_ip, args.source_port, args.destination_port)
            packet = ip_header + tcp_header
            result = s.sendto(packet, (args.destination_ip, 0))
+           '''
 
 if __name__ == '__main__':
         main()
