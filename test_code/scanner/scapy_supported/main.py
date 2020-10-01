@@ -11,7 +11,7 @@ import host_checks
 import argparse
 import time 
 import tcp_syn
-
+import tcp_ack
 
 def main():
         # Raw socket for raw packet
@@ -28,7 +28,8 @@ def main():
         parser.add_argument("-p", "--port_checks", help="Port switch  which will take a number of ports and scan them against destination ip", type=int, nargs='+')
         # Verbose level 1 (Regular scan of top 1,000 port_checks)
         parser.add_argument("-s", "--syn", help="Sending SYN packets to each target port and then looking for the response being open/closed/filtered", action='store_true')
-        parser.add_argument("-w", "--sweep", help="Port sweep through the network", action='store_true')
+        parser.add_argument("-w", "--sweep", help="Port sweep through the machine", action='store_true')
+        parser.add_argument("-a", "--ack", help="ACK scan a given port to see if filtered or not by stateful firewall", action='store_true')
         args = parser.parse_args()
         port_checks.portNumLimit(args.source_port)
         port_checks.portNumLimit(args.destination_port)
@@ -38,8 +39,6 @@ def main():
         #ip_header = craft.ipCreate('127.0.0.1', args.destination_ip)
         #tcp_header = craft.tcpCreate('127.0.0.1', args.destination_ip, args.source_port, args.destination_port)
         #packet = ip_header + tcp_header
-        #port_checks.portNumLimit(args.source_port)
-        #port_checks.portNumLimit(args.destination_port)
         print('IP Address is: ' + args.destination_ip)
         print("Checking host availability with a ping")
         target_ip_check = host_checks.icmp_check(args.destination_ip)
@@ -74,6 +73,10 @@ def main():
         if args.syn:
             for port in args.port_checks[0:]:
                 tcp_syn.send_syn(args.destination_ip, port)
+
+        if args.ack:
+            for port in args.port_checks[0:]:
+                tcp_ack.send_ack(args.destination_ip, port)
 
         if args.forge:
            print("Forged IP address: %s" % (args.forge))
