@@ -74,7 +74,6 @@ def main():
         if args.syn:
             for port in args.port_checks[0:]:
                 tcp_syn.send_syn(args.destination_ip, port)
-            print("This is for sending SYN packets to all ports")
 
         if args.forge:
            print("Forged IP address: %s" % (args.forge))

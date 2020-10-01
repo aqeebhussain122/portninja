@@ -22,12 +22,17 @@ def send_syn(target_ip, port):
         # Think of a better way to present this
         if(int(resp_packet.getlayer(ICMP).type)==3 and int(resp_packet.getlayer(ICMP).code) in [1,2,3,9,10,13]):
             print("Filtered port - Try an ACK scan")
-            sys.exit(1)
+            #sys.exit(1)
+            # return the state of the packet 
+            return resp_packet
 
     if resp_packet.getlayer(TCP).flags == "SA":
         print(port, "is open")
+        return resp_packet
+
     elif resp_packet.getlayer(TCP).flags == "RA":
         print(port, "is closed")
+        return resp_packet
     else:
         pass
     return resp_packet
