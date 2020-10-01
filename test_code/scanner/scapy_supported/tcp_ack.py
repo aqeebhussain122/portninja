@@ -1,6 +1,6 @@
 from scapy.all import *
 
-def ack_scan(ip, port, result = 1):
+def send_ack(ip, port, result = 1):
     src_port = RandShort()
 
     try: 
@@ -32,4 +32,4 @@ def main():
         pass
     print(response)
     return 0
-main()
+#main()
