@@ -12,13 +12,13 @@ import argparse
 import time 
 import tcp_syn
 import tcp_ack
+import random
 
 def main():
         # Raw socket for raw packet
         s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
         parser = argparse.ArgumentParser(description='SYN Scan and flood tool which forms raw packets taking required IP addresses and port numbers')
         parser.add_argument("destination_ip", help='Destination IP address to form packet', type=str)
-        parser.add_argument("source_port", help='Source port to form packet', type=int)
         parser.add_argument("destination_port", help='Destination port to form packet', type=int)
         parser.add_argument("-f", "--flood", help="SYN Flood option to send arbituary number of packets to flood device or network", type=int)
         parser.add_argument("-x", "--forge", help="Forge source IP address fields in packets to mask location", type=str)
@@ -31,7 +31,8 @@ def main():
         parser.add_argument("-a", "--ack", help="Sending ACK packets to each target port and then looking for the response being open/closed/filtered", action='store_true')
         parser.add_argument("-w", "--sweep", help="Port sweep through the network", action='store_true')
         args = parser.parse_args()
-        port_checks.portNumLimit(args.source_port)
+        src_port = random.randint(1, 65535)
+        port_checks.portNumLimit(src_port)
         port_checks.portNumLimit(args.destination_port)
         
 
