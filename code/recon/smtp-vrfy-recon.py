@@ -1,22 +1,26 @@
 #!/usr/bin/python3
+
 import socket
 import sys
-import time
 
 target = sys.argv[1]
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-print("Connecting to SMTP server")
 sock.connect((target, 25))
 banner = sock.recv(1024)
+print(banner.decode("utf-8"))
 
-print(banner)
+# Sending the VRFY call and seeing if it exists. Every box has root so a good rule of thumb to test
+sock.send(b'VRFY root \r\n')
 
-with open('test_list.txt') as fp:
-	lines = fp.readlines()
-	for line in lines:
-		sock.send(b'VRFY %b' % line.encode())
-		time.sleep(5)
-		answerUsername = sock.recv(1024)
-		print(answerUsername)
+answerUsername = sock.recv(1024)
+print(answerUsername.decode("utf-8"))
+answerUsername_decoded = answerUsername.decode("utf-8")
+
+answerAsArray = answerUsername_decoded.split(" ")
+
+if answerAsArray[0] == "252":
+	print("VRFY works")
+else:
+	print("VRFY is not present")
