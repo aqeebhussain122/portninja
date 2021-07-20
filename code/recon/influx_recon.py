@@ -255,7 +255,7 @@ def influx_attack(target):
 
 def main():
     target = sys.argv[1]
-    #recon = influx_recon(target)
+    recon = influx_recon(target)
     attack = influx_attack(target)
     
 
