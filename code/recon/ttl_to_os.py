@@ -7,6 +7,16 @@ import re
 # Author(s): Aqeeb Hussain, Mattia Campagnano #
 ###############################################
 
+def check_traceroute(traceroute_file):
+    f = open(traceroute_file)
+    lines = f.readlines()
+
+    for line in lines:
+        proc = subprocess.Popen(['traceroute', '{}'.format(ip_addr)], stdout=subprocess.PIPE)
+        print(proc)
+
+
+
 def check_ping(ping_file):
     f = open(ping_file, "r")
     lines = f.readlines()
@@ -35,10 +45,14 @@ def check_ping(ping_file):
 def main():
     # Make a dictionary which ties the IP addresses with its ttl value
  #   ip_ttl = {}
+
     filename = sys.argv[1]
+    traced_hosts = traceroute_file(filename)
+    """
     alive_hosts = check_ping(filename)
     print("\nDisplaying ttl values\n")
     for i in range(len(alive_hosts)):
         print(alive_hosts[i])
+    """
 
 main()
