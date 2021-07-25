@@ -6,9 +6,9 @@ import re
 def check_ping(ping_file):
     f = open(ping_file, "r")
     lines = f.readlines()
-    alive_hosts = []
+
     traceroute_value = []
-    
+    trace_ttl = []
     for line in lines:
         ip_addr = line.strip()
         ping_proc = subprocess.Popen(['ping', '-c', '1', '{}'.format(ip_addr)], stdout=subprocess.PIPE)
@@ -28,9 +28,19 @@ def check_ping(ping_file):
 
         ttl_org = int(output[-2][1]) + ttl_value_int
         print("IP address: {} has original TTL of {}".format(ip_addr, ttl_org))
+        trace_ttl.append([ip_addr, ttl_org])
+
+    return trace_ttl
 
 def main():
     filename = sys.argv[1]
     alive_hosts = check_ping(filename)
+    for i in range(len(alive_hosts)):
+        ttl_values = alive_hosts[i][1]
+        #print(ttl_values)
+        if ttl_values in range(56, 66):
+            print("{} is Linux".format(alive_hosts[i][0]))
+        elif ttl_values in range(120,129):
+            print("{} is Windows".format(alive_hosts[i][0]))
 
 main()
