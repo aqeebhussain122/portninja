@@ -12,7 +12,7 @@ def check_traceroute(traceroute_file):
     lines = f.readlines()
 
     for line in lines:
-        proc = subprocess.Popen(['traceroute', '{}'.format(ip_addr)], stdout=subprocess.PIPE)
+        proc = subprocess.Popen(['traceroute', '{}'.format(line)], stdout=subprocess.PIPE)
         print(proc)
 
 
@@ -47,7 +47,7 @@ def main():
  #   ip_ttl = {}
 
     filename = sys.argv[1]
-    traced_hosts = traceroute_file(filename)
+    traced_hosts = check_traceroute(filename)
     """
     alive_hosts = check_ping(filename)
     print("\nDisplaying ttl values\n")
