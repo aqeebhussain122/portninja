@@ -20,6 +20,10 @@ def check_ping(ping_file):
             ttl_value = re.search(r'\d+', ttl).group(0)
             ttl_value_int = int(ttl_value)
 
+        elif ping_proc.returncode != 0:
+            print("{} is not responding to pings".format(ip_addr))
+            continue
+
         traceroute_proc = subprocess.Popen(['traceroute', '{}'.format(ip_addr)], stdout=subprocess.PIPE)
         traceroute_stdout, traceroute_stderr = traceroute_proc.communicate()
         if traceroute_proc.returncode == 0:
@@ -38,7 +42,7 @@ def main():
     for i in range(len(alive_hosts)):
         ttl_values = alive_hosts[i][1]
         #print(ttl_values)
-        if ttl_values in range(56, 66):
+        if ttl_values in range(50, 66):
             print("{} is Linux".format(alive_hosts[i][0]))
         elif ttl_values in range(120,129):
             print("{} is Windows".format(alive_hosts[i][0]))
