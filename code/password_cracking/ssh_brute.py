@@ -1,14 +1,8 @@
-import requests
-import time
-from stem import Signal
-from stem.control import Controller
 import socket
 import paramiko
-import threading
 import sys
 import os
-import getpass
-import random
+import time
 
 # Create a class for this to do TOR based stuff
 def read_file(wordlist):
