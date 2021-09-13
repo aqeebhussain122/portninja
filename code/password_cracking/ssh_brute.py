@@ -69,4 +69,6 @@ if __name__ == "__main__":
             # Kill the for loop
             break
         print("Trying password: {}".format(wordlist[words]))
+        # Allowing 3 attempts to be made just under the threshold of 600
+        time.sleep(200.1)
         # The password is found, we no longer want to request further connections
