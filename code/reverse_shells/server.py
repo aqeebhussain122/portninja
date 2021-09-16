@@ -6,7 +6,7 @@ import os
 from signal import signal, SIGINT
 
 #####################################################################
-# ORIGINAL AUTHOR: Petr Macharia (https://github.com/peter-macharia)#
+# ORIGINAL AUTHOR: Peter Macharia (https://github.com/peter-macharia)#
 # Modifications by: Aqeeb Hussain                                   #
 # Error handling, print statements of command output.               #
 #####################################################################
