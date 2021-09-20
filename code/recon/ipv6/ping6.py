@@ -50,7 +50,8 @@ print(payload)
 icmp_sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM, socket.IPPROTO_ICMPV6)
 #icmp_sock = socket.socket(socket.SOCK_DGRAM, socket.IPPROTO_ICMPV6)
 # Connect to the target on port 0. Doesn't matter because iCMP does not work on port level
-icmp_sock.connect(('::1', 0))
+#icmp_sock.setsockopt(socket.IPPROTO_IPV6,socket.IPV6_MULTICAST_IF,b'ens33')
+icmp_sock.connect(('fe80::8d4f:3a47:6e4c:225e', 0))
 # Send all pf the data as an ICMP echo request message code number 128 for ICMPv6
 send = icmp_sock.sendall(b'\x80\0' + payload)
 print(send)
