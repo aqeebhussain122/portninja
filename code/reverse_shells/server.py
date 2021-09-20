@@ -11,6 +11,7 @@ from signal import signal, SIGINT
 # Error handling, print statements of command output.               #
 #####################################################################
 
+# Signal handler to prevent ctrl + c from killing connection
 def signal_handler(signal, frame):
     print("Type exit to kill connection")
     #print("\n[!] Connection closed [!]")
@@ -64,10 +65,11 @@ def perform_task(client_conn):
             while True:
                 # Byte data coming from the client in reverse shell
                 raw_data = client.recv(1024)
+                # Decoded data from bytes to string in order to read it.
                 decoded_data = raw_data.decode("utf-8")
                 print(decoded_data)
 
-                # If no data is coming in then stop instead of looping
+                # If no data is coming in then stop the socket
                 if not decoded_data:
                     # Raise exception if data is not coming in.
                     raise Exception("Error: Data not being received")
