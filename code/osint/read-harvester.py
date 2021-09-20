@@ -28,10 +28,11 @@ def json_hosts(json_harv_file):
         ip_addrs = l[1:]
         if not hostnames:
             print('No hostname found')
-        elif not ip_addrs:
+        elif len(ip_addrs) == 0:
             print('No IP found for {}'.format(hostnames))
-        
-        print("Hostname(s): {} / IP address(es): {}".format(hostnames, str(ip_addrs)))
+        elif len(ip_addrs) > 0:
+            ip_addrs_str = ' '.join([str(item) for item in ip_addrs])
+            print("Hostname(s): {} / IP address(es): {}".format(hostnames, ip_addrs_str))
 
 
 def json_emails(json_harv_file):
