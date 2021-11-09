@@ -6,8 +6,7 @@
 ip=$1
 port=$2
 
-#timeout 1 /bin/bash -c 'cat < /dev/null > /dev/tcp/192.168.1.11/8080'
-`timeout 1 cat < /dev/null > /dev/tcp/$ip/$port`;
+timeout 1 /bin/bash -c 'cat < /dev/null > /dev/tcp/192.168.0.56/810'
 
 code=$?
 echo "Error code is: $code"
