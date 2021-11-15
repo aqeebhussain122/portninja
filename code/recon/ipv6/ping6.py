@@ -3,6 +3,7 @@ import random
 import struct
 import select
 import socket
+import sys
 
 #https://docs.python.org/3/library/struct.html
 # s = string
@@ -37,34 +38,34 @@ def ping(addr, timeout=1, number=1, data=b''):
 if __name__ == '__main__':
     print(ping('192.168.0.56'))
 """
-#https://github.com/krabelize/icmpdoor/blob/main/icmpdoor.py
 
-# Use subprocess to translate the commands to utf-8 and then execute them via each side. 
-# Payload data which eventually needs to lead to reverse shell
-ICMP_CODE = 41
-payload_data = b'somedata'
-payload = struct.pack('!HH', random.randrange(0,65536), int(ICMP_CODE)) + payload_data
-print(payload)
+# https://stackoverflow.com/questions/65285314/python3-socket-sending-multicast-message-over-ipv6-uses-different-interface-eve
 
-# Create a non-root datagram
-icmp_sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM, socket.IPPROTO_ICMPV6)
-#icmp_sock = socket.socket(socket.SOCK_DGRAM, socket.IPPROTO_ICMPV6)
-# Connect to the target on port 0. Doesn't matter because iCMP does not work on port level
-#icmp_sock.setsockopt(socket.IPPROTO_IPV6,socket.IPV6_MULTICAST_IF,b'ens33')
-icmp_sock.connect(('fe80::8d4f:3a47:6e4c:225e', 0))
-# Send all pf the data as an ICMP echo request message code number 128 for ICMPv6
-send = icmp_sock.sendall(b'\x80\0' + payload)
+
+interface = sys.argv[1]
+
+# Get the interface number of the target interface on the internal network
+interface_number = socket.if_nametoindex(interface)
+print(interface_number)
+# Iniialise a UDP socket which will be of type IPv6
+udp_socket = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+# Reuse the address/
+udp_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+# Let our messages come back to us.
+udp_socket.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_LOOP, True)
+udp_socket.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_MULTICAST_HOPS, 255)
+addrinfo = socket.getaddrinfo("ff02::1", None)[0]  # multicast group is ff02::1
+group_bin = socket.inet_pton(addrinfo[0], addrinfo[4][0])
+mreq = group_bin + struct.pack("@I", int(interface_number))  # socket.if_nametoindex("eth0")  gives 2
+udp_socket.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_JOIN_GROUP, mreq)
+udp_socket.setsockopt(socket.IPPROTO_IPV6,socket.IPV6_MULTICAST_IF,0)
+#udp_socket.bind(('::1', 8080))
+bind = udp_socket.bind(('::1', 8080))
+send = udp_socket.sendto(bytes([1, 2, 3, 4]), ("ff02::1", 13500))
+
+print(udp_socket)
+print(addrinfo)
+print(mreq)
 print(send)
+print(bind)
 
-# Cpnverting the given values into bytes
-
-#RFC1700 stated it must be so. (and defined network byte order as big-endian).
-
-ICMP_ECHO_REQUEST = 128
-# Protocol number
-
-
-# Generate the payload to pack the data up to send through the wire.
-
-#icmp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_ICMP)
-#print(icmp_sock.connect(('192.168.0.56', 22)))
