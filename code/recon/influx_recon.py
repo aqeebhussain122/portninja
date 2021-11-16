@@ -255,13 +255,10 @@ def influx_attack(target):
 
 def main():
     target = sys.argv[1]
-<<<<<<< HEAD
     # Information associated to the database which can help in confirming that influx is exposed. If no credentials needed then you can create a user and inject/drop/query the database 
     recon = influx_recon(target)
     # Attacker function should only work if recon script doesn't fail. Need to add some True/False checks.
-=======
     recon = influx_recon(target)
->>>>>>> a217d9b1099d79e9741842cefc4e03a773a19488
     attack = influx_attack(target)
    
 if __name__ == '__main__':
