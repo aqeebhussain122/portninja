@@ -67,5 +67,5 @@ if __name__ == "__main__":
         print("Trying password: {}".format(wordlist[words]))
         # Allowing 3 attempts to be made just under the threshold of 600
         threshold = time.sleep(200.1)
-        print("Sleeping for {}".format(threshold))
+        print("Sleeping for 200 seconds")
         # The password is found, we no longer want to request further connections
