@@ -37,11 +37,11 @@ def main():
                 if packet_len != 0:
                     print(packet)
                     print("Target UDP port: {}".format(udp_pkt[UDP].dport))
+                    print("UDP traffic found from: {}".format(udp_pkt[IP].dst))
                     write_file =  wrpcap('udp-traffic.pcap', udp_pkt, append=True)
                 else:
                     continue
                 # Print out the IP address which reported rejected rules back.
-                print("UDP traffic found from: {}".format(udp_pkt[IP].dst))
 
     except KeyboardInterrupt:
         sys.exit(0)
