@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#############################################
+# Authors: Aqeeb Hussain, Mattia Campagnano #
+#############################################
+
 # Check if amass is installed or not to determine installation.
 check_amass_installed()
 {
