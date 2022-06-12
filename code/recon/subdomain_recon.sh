@@ -6,21 +6,23 @@
 
 check_amass_installed()
 {
+	# Check if amass is installed or not to determine installation.
 	amasspath=$(find / -type f -executable -name amass 2>/dev/null)
-	for i in $amasspath
-			do
-				check_file=$(file $i | grep -i lsb | cut -d : -f 1)
-			done
+	
+	#for i in $amasspath
+	#do
+	#	check_file=$(file $i | grep -i lsb | cut -d : -f 1)
+	#done
 
 	check_ubuntu=$(uname -a | grep -iq ubuntu)
 	ubuntu_exist=$?
-	# If Amass is not installed.
+	# If Amass is not installed. Need to change this logic to cater for a source code installation via Go. 
 	if [ -z "$check_file" ] ; then
 		echo "Amass isn't installed. Attempting install on a Ubuntu OS."
 		# Check if the installed system is Ubuntu. We don't need to see the output so we use -q
 		if [ $ubuntu_exist -ne 0 ]; then
 			# If Ubuntu is not installed then quit.
-			echo "Your OS is not Ubuntu"			
+			echo "Your OS is not Ubuntu"
 			return 1
 		else
 			echo "OS is Ubuntu, downloading amass."
@@ -46,11 +48,12 @@ amass_scans()
 
 	echo "Grabbing further info in normal enum mode"
 	$find_amass enum -d $1 -o "amassoutput"
+
 }
 
 root_domain=$1
 
 echo "Performing subdomain checks via Wayback"
-curl -s "http://web.archive.org/cdx/search/cdx?url=*.$1/*&output=text&fl=original&collapse=urlkey" |sort| sed -e 's_https*://__' -e "s/\/.*//" -e 's/:.*//' -e 's/^www\.//' | uniq
+curl "http://web.archive.org/cdx/search/cdx?url=*.$root_domain/*&output=text&fl=original&collapse=urlkey" | sort | sed -e 's_https*://__' -e "s/\/.*//" -e 's/:.*//' -e 's/^www\.//' | uniq | tee -a wayback_domains.txt
 
-amass_scans $1
+amass_scans $root_domain
