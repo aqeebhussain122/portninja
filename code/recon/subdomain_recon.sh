@@ -60,5 +60,7 @@ echo "Performing subdomain checks via Wayback"
 # Do some enumeration via wayback
 curl "http://web.archive.org/cdx/search/cdx?url=*.$root_domain/*&output=text&fl=original&collapse=urlkey" | sort | sed -e 's_https*://__' -e "s/\/.*//" -e 's/:.*//' -e 's/^www\.//' | uniq | tee -a wayback_domains.txt
 
+echo "I found $(grep $1 wayback_domains.txt | wc -l) domains on wayback"
+
 # Input parameter is the root doman to conduct the scans. 
 amass_scans $root_domain
