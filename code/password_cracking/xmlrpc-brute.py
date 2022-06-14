@@ -1,6 +1,6 @@
 import requests
 import sys
-from html import escape as esc #wtf even is this???
+from html import escape as esc 
 
 # Reference: https://github.com/kavishgr/xmlrpc-bruteforcer/blob/master/xmlrpcbruteforce.py
 
