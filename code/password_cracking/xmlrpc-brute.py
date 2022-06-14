@@ -47,11 +47,7 @@ def brute_xmlrpc_payload(target_url, user, passwords):
     return req.text
 
 def bruteforce(wordlist):
-    # Open the file
-    # Read through the file
-    # Loop through the file
-    # Cry
-
+    
     with open(wordlist) as f:
         lines = f.readlines()
         print(lines)
