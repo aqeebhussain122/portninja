@@ -3,6 +3,8 @@
 interface_name=$1
 filename=$2
 
+# Grab link local IPv6 addresses of hosts and get SSH version. Use intended for internal network.
+
 args() 
 {
 	if [[ $# -ne 2 ]]
@@ -26,7 +28,7 @@ ipv6_ssh_probes()
 		#echo $ipv6
 		# Send one ping to the target and if it is alive then echo it
 		ping_target=`ping6 -c 1 $ipv6%$interface_name | grep ttl`
-		# Banner grabs the SSh version on the target with a timeout switch
+		# Banner grabs the SSH version on the target with a timeout switch
 		port_scan=`timeout 1 cat < /dev/tcp/$ipv6%$1/22`
 		echo "Device $ipv6 has SSH version: $port_scan"
 		# Using this to check for password based IPv6 entry points to try and crack them via IPv6
