@@ -48,7 +48,7 @@ def TCPbannerGrab(ip_addr, port_num):
             #sock.send(b'HEAD / HTTP/1.1\nHost:' + b'\n' + '\n\n')
         # If the banner contains an empty string but the connection went through
 
-        if result == "" or None:
+        if result == "" or None or len(result) == 0:
             print("Banner not showing up :(")
             sock.close()
         else:
