@@ -3,6 +3,8 @@
 interface_name=$1
 filename=$2
 
+# Grab link local IPv6 addresses of hosts and get SSH version. Use intended for internal network.
+
 args() 
 {
 	if [[ $# -ne 2 ]]
