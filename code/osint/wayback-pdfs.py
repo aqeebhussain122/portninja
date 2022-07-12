@@ -7,8 +7,6 @@ import os
 requests.packages.urllib3.disable_warnings()
 
 proxies = {"http": "http://127.0.0.1:8080", "https": "http://127.0.0.1:8080"}
-#r = requests.get("https://web.archive.org/web/20220406085043/http://icc.dur.ac.uk/~jlvc76/Files/CV/CV_MatthieuSchaller.pdf", allow_redirects=True, proxies=proxies, verify=False)
-#req = requests.get("https://web.archive.org/web/20211127144149/http://icc.dur.ac.uk/~jlvc76/Files/CV/CV_MatthieuSchaller.pdf, timeout=1")
 
 def parse_json(cdx_url):
     urls = []
