@@ -18,6 +18,9 @@ def parse_json(cdx_url):
         url = cdx_req[2]
         #print(timestamp, url)
         urls.append([timestamp, url])
+     
+    if len(urls) == 0:
+		sys.exit("No URLs found")
 
     urls.pop(0)
     return urls
