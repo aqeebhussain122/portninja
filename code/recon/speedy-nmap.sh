@@ -46,4 +46,4 @@ maxRttVal=${timeArr[0 - 1]}
 minRttValSum=$(($minRttVal + 25))
 maxRttValSum=$(($maxRttVal + 100 ))
 
-nmap -vvv -Pn -sSCV --min-rtt-timeout ${minRttValSum}ms --max-rtt-timeout ${maxRttValSum}ms --max-retries 1 --max-scan-delay 0 --min-hostgroup 4 -iL $1 -oA Tuned_FullPort
+nmap -vvv -Pn -sT --min-rtt-timeout ${minRttValSum}ms --max-rtt-timeout ${maxRttValSum}ms --max-retries 1 --max-scan-delay 0 --min-hostgroup 4 -iL $1 -oA Tuned_FullPort
