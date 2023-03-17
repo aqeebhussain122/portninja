@@ -3,7 +3,7 @@
 timeArr=()
 # Make requests to a number of targets
 # Make 4 pings when it's one target, make 1 when it's multiple. 
-timeVals=$(for i in `cat target.txt`; do ping -c 2 -W 1 $i | grep ttl | awk {'print $7'} | grep -Eo '[0-9]{1,10}'; done)
+timeVals=$(for i in `cat $1`; do ping -c 2 -W 1 $i | grep ttl | awk {'print $7'} | grep -Eo '[0-9]{1,10}'; done)
 
 # Cycle through the time values
 for i in $timeVals; 
@@ -46,4 +46,4 @@ maxRttVal=${timeArr[0 - 1]}
 minRttValSum=$(($minRttVal + 25))
 maxRttValSum=$(($maxRttVal + 100 ))
 
-nmap -vvv -Pn -sS --min-rtt-timeout ${minRttValSum}ms --max-rtt-timeout ${maxRttValSum}ms --max-retries 1 --max-scan-delay 0 --min-hostgroup 4 -iL target.txt -oA Tuned_FullPort
+nmap -vvv -Pn -sSCV --min-rtt-timeout ${minRttValSum}ms --max-rtt-timeout ${maxRttValSum}ms --max-retries 1 --max-scan-delay 0 --min-hostgroup 4 -iL $1 -oA Tuned_FullPort
