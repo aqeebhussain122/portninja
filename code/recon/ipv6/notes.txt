@@ -1,4 +1,0 @@
-Testing environment.
-
-Target machine needs an fe80 address which can be pinged
-Also use the following tcpdump expression: tcpdump -i ens33 icmp6
